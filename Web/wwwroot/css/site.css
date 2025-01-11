@@ -1,0 +1,188 @@
+/* Global Styles */
+html {
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+body {
+    margin-bottom: 60px;
+    background-color: #f0f8ff; /* Light blue background */
+    color: #333;
+}
+
+/* Hero Section */
+.jumbotron {
+    background: linear-gradient(45deg, #1e3c72, #2a5298); /* Blue gradient */
+    color: white;
+    padding: 80px 0;
+}
+
+    .jumbotron .btn {
+        background-color: #ffffff;
+        color: #1e3c72; /* Dark blue text */
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+
+        .jumbotron .btn:hover {
+            background-color: #1e3c72;
+            color: white;
+        }
+
+/* Featured Roles Cards */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+    .card:hover {
+        transform: translateY(-10px);
+    }
+
+.card-header {
+    background: linear-gradient(45deg, #1e3c72, #2a5298); /* Blue gradient */
+    color: white;
+}
+
+.card-title {
+    font-weight: bold;
+}
+
+.card-body {
+    background-color: #ffffff;
+    padding: 20px;
+}
+
+/* Button Styles */
+.btn-gradient {
+    background: linear-gradient(45deg, #1e3c72, #2a5298); /* Blue gradient */
+    color: white;
+    font-weight: bold;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+    .btn-gradient:hover {
+        background: linear-gradient(45deg, #2a5298, #1e3c72); /* Darker blue gradient */
+        color: white;
+    }
+
+.btn-rounded {
+    border-radius: 25px;
+}
+
+.pulse {
+    animation: pulse-animation 1.5s infinite;
+}
+
+@keyframes pulse-animation {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Testimonial Cards */
+.testimonial-card {
+    border-radius: 12px;
+    background-color: #1e3c72; /* Blue background */
+    color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    transition: transform 0.3s ease;
+}
+
+    .testimonial-card:hover {
+        transform: translateY(-10px);
+    }
+
+    .testimonial-card img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+    }
+
+/* Footer */
+.footer {
+    background-color: #1e3c72; /* Dark blue background */
+    color: white;
+    padding: 20px;
+    font-size: 0.9rem;
+}
+
+footer a {
+    color: #ffffff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+    footer a:hover {
+        color: #2a5298; /* Light blue on hover */
+    }
+
+/* Animations */
+.animated {
+    animation-duration: 1s;
+    animation-fill-mode: both;
+}
+
+.fadeIn {
+    animation-name: fadeIn;
+}
+
+.fadeInUp {
+    animation-name: fadeInUp;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fadeIn.delay-1s {
+    animation-delay: 1s;
+}
+
+.fadeIn.delay-2s {
+    animation-delay: 2s;
+}
+
+.fadeInUp.delay-1s {
+    animation-delay: 1s;
+}
+
+.pulse {
+    animation: pulse-animation 1.5s infinite;
+}

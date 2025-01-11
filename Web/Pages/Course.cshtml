@@ -1,0 +1,93 @@
+﻿@page
+@model Web.Pages.CourseModel
+
+<h2>Available Courses</h2>
+
+<!-- Form to Add a New Course -->
+<h3>Add New Course</h3>
+<form method="post" asp-page-handler="Create">
+    <div class="form-group">
+        <label for="Category">Category</label>
+        <select id="Category" asp-for="SelectedCategory" class="form-control" onchange="updateSubCategories()">
+            <option value="" disabled selected>Select a category</option>
+            <option value="Technical">Technical</option>
+            <option value="Creative">Creative</option>
+            <option value="Business">Business</option>
+            <option value="Personal Development">Personal Development</option>
+            <option value="Other">Other</option>
+        </select>
+        <span asp-validation-for="SelectedCategory" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="SubCategory">Subcategory</label>
+        <select id="SubCategory" asp-for="NewCourse.Category" class="form-control">
+            <option value="" disabled selected>Select a subcategory</option>
+        </select>
+        <span asp-validation-for="NewCourse.Category" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success">Add Course</button>
+</form>
+
+<hr />
+
+<!-- List of Available Courses -->
+<h2>Available Courses</h2>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Category</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Courses?.Any() ?? false)
+        {
+            @foreach (var item in Model.Courses)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                    <td>@item.Description</td>
+                    <td>@item.Category</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3" class="text-center">No courses available.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    // Define subcategories for each main category
+    const subCategories = {
+        "Technical": ["Programming", "Networking", "AI and Machine Learning", "Cybersecurity"],
+        "Creative": ["Graphic Design", "Photography", "Video Editing"],
+        "Business": ["Finance", "Marketing", "Entrepreneurship"],
+        "Personal Development": ["Leadership", "Time Management", "Public Speaking"],
+        "Other": ["Miscellaneous"]
+    };
+
+    function updateSubCategories() {
+        const category = document.getElementById("Category").value;
+        const subCategoryDropdown = document.getElementById("SubCategory");
+
+        // Clear existing options
+        subCategoryDropdown.innerHTML = '<option value="" disabled selected>Select a subcategory</option>';
+
+        // Populate new subcategories
+        if (subCategories[category]) {
+            subCategories[category].forEach(subCategory => {
+                const option = document.createElement("option");
+                option.value = subCategory;
+                option.textContent = subCategory;
+                subCategoryDropdown.appendChild(option);
+            });
+        }
+    }
+</script>
+
+
