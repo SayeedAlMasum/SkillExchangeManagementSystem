@@ -1,4 +1,5 @@
-﻿using Database.Model;
+﻿//PaymentService.cs
+using Database.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace Services
@@ -18,8 +19,12 @@ namespace Services
             if (string.IsNullOrWhiteSpace(cardNumber) || string.IsNullOrWhiteSpace(expiryDate) || string.IsNullOrWhiteSpace(cvv))
                 return false;
 
+            // Convert courseId to int
+            if (!int.TryParse(courseId, out int courseIdInt))
+                return false; // Invalid courseId format
+
             // Check if the course exists
-            var course = await _context.Set<Course>().FindAsync(courseId);
+            var course = await _context.Set<Course>().FindAsync(courseIdInt);
             if (course == null)
                 return false;
 
@@ -27,10 +32,10 @@ namespace Services
             var payment = new Payment
             {
                 UserInfoId = userInfoId,
-                CourseId = courseId,
+                CourseId = courseIdInt, // Use the converted int value
                 PaymentStatus = "Success", // Assuming a successful payment
                 CardNumber = cardNumber,
-                ExpiryDate = expiryDate,
+                ExpiryDate = DateTime.Parse(expiryDate), // Convert expiryDate to DateTime
                 CVV = cvv
             };
 
@@ -39,6 +44,7 @@ namespace Services
 
             return true;
         }
+
 
         public async Task<List<Payment>> GetPaymentsForUserAsync(string userInfoId)
         {

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿//Payment.cs
+using System.ComponentModel.DataAnnotations;
 
 namespace Database.Model
 {
@@ -7,7 +8,7 @@ namespace Database.Model
         [Key]
         public int PaymentId { get; set; }
 
-        public string? CourseId { get; set; }
+        public int CourseId { get; set; }
 
         [Required]
         public string UserInfoId { get; set; }
@@ -16,7 +17,7 @@ namespace Database.Model
         public string PaymentStatus { get; set; } = "Pending";
 
         public string? CardNumber { get; set; }
-        public string? ExpiryDate { get; set; }
+        public DateTime ExpiryDate { get; set; }
         public string? CVV { get; set; }
     }
 }

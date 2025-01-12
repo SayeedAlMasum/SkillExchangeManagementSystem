@@ -5,7 +5,7 @@ namespace Database.Model
     public class Course : BaseModel
     {
         [Key]
-        public string CourseId { get; set; } = Guid.NewGuid().ToString();  // Automatically generating a new GUID
+        public int CourseId { get; set; }   // Automatically generating a new GUID
 
         [Required]
         public string Title { get; set; }  // Non-nullable, so ensure that it's set when creating a course

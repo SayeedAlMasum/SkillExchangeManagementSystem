@@ -12,7 +12,7 @@ namespace Database.Model
         [Key]
         public string SubscriptionId { get; set; } = Guid.NewGuid().ToString();
         [Required]
-        public string? UserId { get; set; }
+        public string? UserInfoId { get; set; }
         [Required]
         public int CourseId { get; set; }
         [Required]
@@ -24,7 +24,7 @@ namespace Database.Model
         [Required]
         public string? SubscriptionType { get; set; }
         [Required]
-        public string? PaymentId { get; set; }
+        public int PaymentId { get; set; }
 
     }
 }

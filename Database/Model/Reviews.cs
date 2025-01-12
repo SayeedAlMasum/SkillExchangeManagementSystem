@@ -11,7 +11,7 @@ namespace Database.Model
     public class Reviews
     {
         [Key]
-        public string? ReviewId { get; set; }=Guid.NewGuid().ToString();
+        public int ReviewId { get; set; }
         [Required]
         public string? UserInfoId { get; set;}
         [Required]
