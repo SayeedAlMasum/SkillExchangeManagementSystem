@@ -15,7 +15,7 @@ using Business.Services;
 namespace Business.Services
 {
 
-    public class UserService
+    public class UserInfoService
     {
         public Result Registration(UserForm user)
         {

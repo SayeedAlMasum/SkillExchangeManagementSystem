@@ -12,7 +12,7 @@ namespace BusinessTest
             userForm.FullName = Console.ReadLine();
             userForm.Email = Console.ReadLine();
             userForm.Password = Console.ReadLine();
-            Result result = new UserService().Registration(userForm);
+            Result result = new UserInfoService().Registration(userForm);
             Console.WriteLine("Hello, World!");
         }
     }
