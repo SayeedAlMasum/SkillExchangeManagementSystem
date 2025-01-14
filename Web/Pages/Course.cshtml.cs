@@ -12,10 +12,10 @@ namespace Web.Pages
         public List<Course> Courses { get; set; } = new List<Course>();
 
         [BindProperty]
-        public Course NewCourse { get; set; } = new Course();
+        public Course Course { get; set; } = new Course();
 
-        [BindProperty]
-        public string SelectedCategory { get; set; } = string.Empty;
+      
+    
 
         public void OnGet()
         {
@@ -27,20 +27,20 @@ namespace Web.Pages
             }
         }
 
-        public IActionResult OnPostAddCourse()
+        public IActionResult OnPost()
         {
             if (ModelState.IsValid)
             {
-                if (NewCourse.IsPremium)
+                if (Course.IsPremium)
                 {
                     // Redirect to payment page or handle payment
-                    return RedirectToPage("/Payment", new { courseId = NewCourse.CourseId });
+                    return RedirectToPage("/Payment", new { courseId = Course.CourseId });
                 }
                 else
                 {
                     using (var context = new SkillExchangeContext())
                     {
-                        context.Course.Add(NewCourse);
+                        context.Course.Add(Course);
                         context.SaveChanges();
                     }
                     return RedirectToPage();

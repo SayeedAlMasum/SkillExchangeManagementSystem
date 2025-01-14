@@ -3,7 +3,7 @@ using Database.Model;
 using System.Data;
 namespace DBTest
 {
-    internal class Program
+    public class Program
     {
         static void Main(string[] args)
         {

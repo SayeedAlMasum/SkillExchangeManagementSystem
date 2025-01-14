@@ -5,10 +5,10 @@
 
 <!-- Form to Add a New Course -->
 <h3>Add New Course</h3>
-<form method="post" asp-page-handler="Create">
+<form method="post">
     <div class="form-group">
         <label for="Category">Category</label>
-        <select id="Category" asp-for="SelectedCategory" class="form-control" onchange="updateSubCategories()">
+        <select id="Category" asp-for="Course.Category" class="form-control" onchange="updateSubCategories()">
             <option value="" disabled selected>Select a category</option>
             <option value="Technical">Technical</option>
             <option value="Creative">Creative</option>
@@ -16,14 +16,14 @@
             <option value="Personal Development">Personal Development</option>
             <option value="Other">Other</option>
         </select>
-        <span asp-validation-for="SelectedCategory" class="text-danger"></span>
+        <span asp-validation-for="Course.Category" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label for="SubCategory">Subcategory</label>
-        <select id="SubCategory" asp-for="NewCourse.Category" class="form-control">
+        <select id="SubCategory" asp-for="Course.SubCategory" class="form-control">
             <option value="" disabled selected>Select a subcategory</option>
         </select>
-        <span asp-validation-for="NewCourse.Category" class="text-danger"></span>
+        <span asp-validation-for="Course.SubCategory" class="text-danger"></span>
     </div>
     <button type="submit" class="btn btn-success">Add Course</button>
 </form>
