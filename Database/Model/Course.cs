@@ -8,17 +8,17 @@ namespace Database.Model
         public int CourseId { get; set; }   // Automatically generating a new GUID
 
         [Required]
-        public string Title { get; set; }  // Non-nullable, so ensure that it's set when creating a course
+        public string Title { get; set; }  
 
         [Required]
-        public string Description { get; set; }  // Non-nullable, so ensure that it's set when creating a course
+        public string Description { get; set; } 
 
         [Required]
-        public string Category { get; set; }  // Non-nullable, so ensure that it's set when creating a course
+        public string Category { get; set; }  
 
         [Required]
-        public bool IsPremium { get; set; }  // Non-nullable, indicating if it's a paid course
+        public bool IsPremium { get; set; }  
 
-        public string? SubCategory { get; set; }  // Nullable, as not all courses may have a subcategory
+        public string? SubCategory { get; set; }  
     }
 }

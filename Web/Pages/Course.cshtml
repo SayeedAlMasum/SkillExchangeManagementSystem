@@ -35,8 +35,7 @@
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
-            <th>Title</th>
-            <th>Description</th>
+           
             <th>Category</th>
         </tr>
     </thead>
@@ -46,9 +45,9 @@
             @foreach (var item in Model.Courses)
             {
                 <tr>
-                    <td>@item.Title</td>
-                    <td>@item.Description</td>
+                  
                     <td>@item.Category</td>
+                    <td>@item.SubCategory</td>
                 </tr>
             }
         }
