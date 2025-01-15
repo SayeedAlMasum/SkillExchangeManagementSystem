@@ -11,6 +11,27 @@ namespace Business.Services
     public class CourseService
     {
         SkillExchangeContext skillExchangeContext = new SkillExchangeContext();
+
+        public Result GetCourseById(int courseId)
+        {
+            try
+            {
+                // Retrieve the course by ID from the database
+                var course = skillExchangeContext.Course.FirstOrDefault(c => c.CourseId == courseId);
+
+                if (course == null)
+                {
+                    return new Result(false, "Course not found");
+                }
+
+                return new Result(true, "Success", course);
+            }
+            catch (Exception ex)
+            {
+                return new Result(false, ex.Message);
+            }
+        }
+
         public Result List()
         { //logics
             try

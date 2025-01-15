@@ -1,0 +1,38 @@
+﻿@page
+@model Web.Pages.ContentModel
+
+<h2>@Model.Course.Title</h2>
+<p><strong>Category:</strong> @Model.Course.Category</p>
+<p><strong>Subcategory:</strong> @Model.Course.SubCategory</p>
+<p><strong>Description:</strong> @Model.Course.Description</p>
+
+<!-- Displaying Content for the Course -->
+<h3>Course Content</h3>
+<div>
+    <p><strong>Lesson 1:</strong> Introduction to the Course</p>
+    <p><strong>Lesson 2:</strong> Overview of Key Concepts</p>
+    <p><strong>Lesson 3:</strong> Deep Dive into Course Topics</p>
+    <!-- Add more content dynamically or statically based on the course data -->
+</div>
+
+@if (Model.Course.IsPremium)
+{
+    <div class="alert alert-warning">
+        <strong>This is a Premium Course. Please ensure payment has been made to access full content.</strong>
+    </div>
+}
+else
+{
+    <div class="alert alert-success">
+        <strong>You can access all content for this course for free!</strong>
+    </div>
+}
+
+@if (!Model.IsEnrolled)
+{
+    <a asp-page="/Payment" asp-route-courseId="@Model.Course.CourseId" class="btn btn-warning">Enroll to Access Premium Content</a>
+}
+else
+{
+    <button class="btn btn-success">Start Learning</button>
+}

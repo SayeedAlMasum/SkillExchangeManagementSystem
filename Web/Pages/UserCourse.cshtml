@@ -18,6 +18,7 @@
             <th>Category</th>
             <th>Subcategory</th>
             <th>Is Premium</th>
+            <th>Operation</th>
         </tr>
     </thead>
     <tbody id="courseTable">
@@ -29,7 +30,17 @@
                     <td>@item.Title</td>
                     <td>@item.Category</td>
                     <td>@item.SubCategory</td>
-                    <td>@item.IsPremium ? "Yes" : "No"</td>
+                    <td>@item.IsPremium</td>
+                    <td>
+                        @if (item.IsPremium)
+                        {
+                            <a asp-page="/Payment" asp-route-courseId="@item.CourseId" class="btn btn-warning btn-sm">Enroll</a>
+                        }
+                        else
+                        {
+                            <a asp-page="/Content" asp-route-courseId="@item.CourseId" class="btn btn-primary btn-sm">Content</a>
+                        }
+                    </td>
                 </tr>
             }
         }
