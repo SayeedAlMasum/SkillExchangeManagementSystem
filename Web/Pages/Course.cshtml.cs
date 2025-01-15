@@ -1,3 +1,4 @@
+// Course.cshtml.cs
 using System.Collections.Generic;
 using Business.Services;
 using Database.Context;
@@ -14,40 +15,36 @@ namespace Web.Pages
         [BindProperty]
         public Course Course { get; set; } = new Course();
 
-      
-    
-
+        // OnGet method to load all courses for displaying in the list
         public void OnGet()
         {
-            // Load courses from the service
-            var result = new CourseService().List();
+            var result = new CourseService().List();  // Get courses from the service
             if (result.Success)
             {
                 Courses = (List<Course>)result.Data;
             }
         }
 
+        // OnPost method for adding a new course
+        // OnPost method for adding a new course
         public IActionResult OnPost()
         {
             if (ModelState.IsValid)
             {
-                if (Course.IsPremium)
+                // Set the course creation date (optional)
+                Course.CreatedDate = DateTime.Now;
+
+                // Save the course to the database (both premium and non-premium)
+                using (var context = new SkillExchangeContext())
                 {
-                    // Redirect to payment page or handle payment
-                    return RedirectToPage("/Payment", new { courseId = Course.CourseId });
+                    context.Course.Add(Course);  // Add course to the database
+                    context.SaveChanges();  // Save changes to the database
                 }
-                else
-                {
-                    using (var context = new SkillExchangeContext())
-                    {
-                        context.Course.Add(Course);
-                        context.SaveChanges();
-                    }
-                    return RedirectToPage();
-                }
+
+                return RedirectToPage("/Course");  // Redirect to the course page after saving
             }
 
-            // Reload courses in case of error
+            // If model state is invalid, reload the page with the errors
             OnGet();
             return Page();
         }

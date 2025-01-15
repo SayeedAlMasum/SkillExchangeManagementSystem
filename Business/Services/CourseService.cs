@@ -15,8 +15,8 @@ namespace Business.Services
         { //logics
             try
             {
-                var Users = skillExchangeContext.Course.ToList();
-                return new Result(true, "Success", Users);
+                var courses = skillExchangeContext.Course.ToList();
+                return new Result(true, "Success", courses);
             }
             catch (Exception ex)
             {

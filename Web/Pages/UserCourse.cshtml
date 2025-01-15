@@ -1,0 +1,62 @@
+﻿@* UserCourse.cshtml *@
+@page
+@model Web.Pages.UserCoursesModel
+
+<h2>Available Courses</h2>
+
+<!-- Search Box for User -->
+<div class="form-group">
+    <label for="search">Search Courses</label>
+    <input type="text" id="search" class="form-control" placeholder="Search for a course..." onkeyup="filterCourses()" />
+</div>
+
+<!-- List of Available Courses -->
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Subcategory</th>
+            <th>Is Premium</th>
+        </tr>
+    </thead>
+    <tbody id="courseTable">
+        @if (Model.Courses?.Any() ?? false)
+        {
+            @foreach (var item in Model.Courses)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                    <td>@item.Category</td>
+                    <td>@item.SubCategory</td>
+                    <td>@item.IsPremium ? "Yes" : "No"</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="text-center">No courses available.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    function filterCourses() {
+        const searchInput = document.getElementById("search").value.toLowerCase();
+        const rows = document.querySelectorAll("#courseTable tr");
+
+        rows.forEach(row => {
+            const title = row.querySelector("td:first-child").textContent.toLowerCase();
+            const category = row.querySelector("td:nth-child(2)").textContent.toLowerCase();
+            const subCategory = row.querySelector("td:nth-child(3)").textContent.toLowerCase();
+
+            if (title.includes(searchInput) || category.includes(searchInput) || subCategory.includes(searchInput)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    }
+</script>

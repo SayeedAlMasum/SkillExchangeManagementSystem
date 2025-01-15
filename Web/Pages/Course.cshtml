@@ -1,4 +1,5 @@
-﻿@page
+﻿@* Course.cshtml *@
+@page
 @model Web.Pages.CourseModel
 
 <h2>Available Courses</h2>
@@ -6,6 +7,20 @@
 <!-- Form to Add a New Course -->
 <h3>Add New Course</h3>
 <form method="post">
+    <div class="form-group">
+        <label for="Course Id">Course Id</label>
+        <input type="number" id="Course Id" asp-for="Course.CourseId" class="form-control" required />
+        <span asp-validation-for="Course.CourseId" class="text-danger"></span>
+    <div class="form-group">
+        <label for="Title">Title</label>
+        <input type="text" id="Title" asp-for="Course.Title" class="form-control" required />
+        <span asp-validation-for="Course.Title" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Description">Description</label>
+        <textarea id="Description" asp-for="Course.Description" class="form-control" rows="1" required></textarea>
+        <span asp-validation-for="Course.Description" class="text-danger"></span>
+    </div>
     <div class="form-group">
         <label for="Category">Category</label>
         <select id="Category" asp-for="Course.Category" class="form-control" onchange="updateSubCategories()">
@@ -25,7 +40,12 @@
         </select>
         <span asp-validation-for="Course.SubCategory" class="text-danger"></span>
     </div>
-    <button type="submit" class="btn btn-success">Add Course</button>
+    <div class="form-group">
+        <label for="IsPremium">Is Premium Course?</label>
+        <input type="checkbox" id="IsPremium" asp-for="Course.IsPremium" class="form-check-input" />
+        <span asp-validation-for="Course.IsPremium" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success">Save</button>
 </form>
 
 <hr />
@@ -45,9 +65,10 @@
             @foreach (var item in Model.Courses)
             {
                 <tr>
-                  
+                    <td>@item.Title</td>
                     <td>@item.Category</td>
                     <td>@item.SubCategory</td>
+                    <td>@item.IsPremium</td>
                 </tr>
             }
         }

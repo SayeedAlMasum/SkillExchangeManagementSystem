@@ -17,8 +17,8 @@ namespace Database.Model
         public string Category { get; set; }  
 
         [Required]
-        public bool IsPremium { get; set; }  
-
+        public bool IsPremium { get; set; }
+        [Required]
         public string? SubCategory { get; set; }  
     }
 }
