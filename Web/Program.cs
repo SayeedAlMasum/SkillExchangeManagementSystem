@@ -18,6 +18,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+// Enable Authentication and Authorization middleware
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();

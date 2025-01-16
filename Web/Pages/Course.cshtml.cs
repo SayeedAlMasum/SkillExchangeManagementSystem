@@ -26,7 +26,6 @@ namespace Web.Pages
         }
 
         // OnPost method for adding a new course
-        // OnPost method for adding a new course
         public IActionResult OnPost()
         {
             if (ModelState.IsValid)
@@ -48,6 +47,39 @@ namespace Web.Pages
             OnGet();
             return Page();
         }
+        // OnPost method for updating an existing course
+        public IActionResult OnPostUpdate()
+        {
+            if (ModelState.IsValid)
+            {
+                var result = new CourseService().UpdateCourse(Course);
+                if (result.Success)
+                {
+                    return RedirectToPage("/Course"); // Redirect to the course list after updating
+                }
 
+                // Handle update failure (e.g., display an error message)
+                ModelState.AddModelError("", result.Message);
+            }
+
+            // If the model state is invalid, reload the page with errors
+            OnGet();
+            return Page();
+        }
+
+        // OnPost method for deleting a course
+        public IActionResult OnPostDelete(int courseId)
+        {
+            var result = new CourseService().DeleteCourse(courseId);
+            if (result.Success)
+            {
+                return RedirectToPage("/Course"); // Redirect to the course list after deletion
+            }
+
+            // Handle deletion failure (e.g., display an error message)
+            ModelState.AddModelError("", result.Message);
+            OnGet();
+            return Page();
+        }
     }
 }
