@@ -1,4 +1,5 @@
-﻿@page "{id:int?}"
+﻿@* EditCourse.cshtml *@
+@page "{id:int?}"
 @model Web.Pages.CourseModel
 @{
     ViewData["Title"] = "Edit Course";
@@ -43,13 +44,11 @@
         <input type="checkbox" id="IsPremium" asp-for="Course.IsPremium" class="form-check-input" />
         <span asp-validation-for="Course.IsPremium" class="text-danger"></span>
     </div>
-    <!-- Add other fields similarly -->
-
     <button type="submit" asp-page-handler="Update" class="btn btn-success">Save Changes</button>
     <a asp-page="/Course" class="btn btn-secondary">Cancel</a>
 </form>
+
 <script>
-    // Define subcategories for each main category
     const subCategories = {
         "Technical": ["Programming", "Networking", "AI and Machine Learning", "Cybersecurity"],
         "Creative": ["Graphic Design", "Photography", "Video Editing"],
@@ -62,10 +61,8 @@
         const category = document.getElementById("Category").value;
         const subCategoryDropdown = document.getElementById("SubCategory");
 
-        // Clear existing options
         subCategoryDropdown.innerHTML = '<option value="" disabled selected>Select a subcategory</option>';
 
-        // Populate new subcategories
         if (subCategories[category]) {
             subCategories[category].forEach(subCategory => {
                 const option = document.createElement("option");
@@ -75,4 +72,17 @@
             });
         }
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const category = "@Model.Course.Category";
+        const subCategory = "@Model.Course.SubCategory";
+
+        if (category) {
+            document.getElementById("Category").value = category;
+            updateSubCategories();
+            document.getElementById("SubCategory").value = subCategory;
+        }
+    });
 </script>
+
+  

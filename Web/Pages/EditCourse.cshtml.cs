@@ -1,10 +1,11 @@
-//EditCourse.cshtml.cs
+// EditCourse.cshtml.cs
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Business.Services;
 using Database.Model;
 using System;
 using Database.Context;
+using System.Linq;
 
 namespace Web.Pages
 {
@@ -15,7 +16,6 @@ namespace Web.Pages
 
         public IActionResult OnGet(int id)
         {
-            // Fetch the course by ID
             var result = new CourseService().GetCourseById(id);
 
             if (result.Success && result.Data is Course course)
@@ -24,11 +24,10 @@ namespace Web.Pages
                 return Page();
             }
 
-            // If course not found, redirect to course list
             return RedirectToPage("/Course");
         }
 
-        public IActionResult OnPost()
+        public IActionResult OnPostUpdate()
         {
             if (ModelState.IsValid)
             {
@@ -36,8 +35,7 @@ namespace Web.Pages
                 {
                     using (var context = new SkillExchangeContext())
                     {
-                        // Find the existing course
-                        var existingCourse = context.Course.Find(Course.CourseId);
+                        var existingCourse = context.Course.FirstOrDefault(c => c.CourseId == Course.CourseId);
 
                         if (existingCourse == null)
                         {
@@ -45,7 +43,6 @@ namespace Web.Pages
                             return Page();
                         }
 
-                        // Update course properties
                         existingCourse.Title = Course.Title;
                         existingCourse.Description = Course.Description;
                         existingCourse.Category = Course.Category;
@@ -53,7 +50,6 @@ namespace Web.Pages
                         existingCourse.IsPremium = Course.IsPremium;
                         existingCourse.UpdatedDate = DateTime.Now;
 
-                        // Save changes
                         context.SaveChanges();
                     }
 
@@ -65,7 +61,14 @@ namespace Web.Pages
                 }
             }
 
-            // If ModelState is invalid or an error occurs, reload the page with errors
+            if (!ModelState.IsValid)
+            {
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Console.WriteLine(error.ErrorMessage);
+                }
+            }
+
             return Page();
         }
     }

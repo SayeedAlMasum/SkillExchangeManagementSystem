@@ -68,9 +68,9 @@ namespace Web.Pages
         }
 
         // OnPost method for deleting a course
-        public IActionResult OnPostDelete(int courseId)
+        public IActionResult OnPostDelete(int id)
         {
-            var result = new CourseService().DeleteCourse(courseId);
+            var result = new CourseService().DeleteCourse(id);
             if (result.Success)
             {
                 return RedirectToPage("/Course"); // Redirect to the course list after deletion
