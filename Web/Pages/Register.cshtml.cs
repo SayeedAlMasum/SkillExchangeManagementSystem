@@ -1,3 +1,5 @@
+using Business.FormModel;
+using Business.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
@@ -11,7 +13,7 @@ namespace Web.Pages
         // Validation: Full Name is required
         [BindProperty]
         [Required(ErrorMessage = "Full Name is required.")]
-        public string FullName { get; set; }
+        public string Name { get; set; }
 
         // Binds the Email input field from the form to this property
         // Validation: Email is required and must follow a valid email format
@@ -30,17 +32,43 @@ namespace Web.Pages
         // Handles the POST request when the user submits the registration form
         public IActionResult OnPostRegister()
         {
-            // Check if the model state (form inputs) is valid
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                // Add registration logic here (e.g., save user data to the database)
-
-                // Redirect to the Login page after successful registration
-                return RedirectToPage("/Login");
+                // Return the page with validation errors
+                return Page();
             }
 
-            // If the model state is invalid, redisplay the registration page with validation errors
-            return Page();
+            // Create a UserForm object with the registration details
+            var userForm = new UserForm
+            {
+                Name = Name,
+                Email = Email,
+                Password = Password,
+                IsActive = true,
+                RoleId = 0 // Default role; can be set to a specific value if needed
+            };
+
+            // Create an instance of the UserInfoService
+            var userInfoService = new UserInfoService();
+
+            // Call the Registration method and capture the result
+            var result = userInfoService.Registration(userForm);
+
+            // Check the result of the registration
+            if (result.Success)
+            {
+                // Redirect to the login page on successful registration
+                return RedirectToPage("/LogIn");
+            }
+            else
+            {
+                // Add a model error for registration failure
+                ModelState.AddModelError(string.Empty, result.Message);
+                return Page();
+            }
         }
+
+
     }
 }
+        

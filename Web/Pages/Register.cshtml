@@ -1,12 +1,13 @@
-﻿@page
+﻿@* Register.cshtml *@
+@page
 @model Web.Pages.RegisterModel
 
-<h2>Register</h2>
-<form method="post" asp-page-handler="Register">
+<h2 style="margin-top:10rem;margin-bottom:-8rem; margin-right:25rem;margin-left:25rem;">Register</h2>
+<form method="post" asp-page-handler="Register" style="margin:10rem;margin-right:25rem;margin-left:25rem;">
     <div class="form-group">
-        <label for="FullName">Full Name</label>
-        <input type="text" id="FullName" asp-for="FullName" class="form-control" />
-        <span asp-validation-for="FullName" class="text-danger"></span>
+        <label for="Name">Name</label>
+        <input type="text" id="Name" asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label for="Email">Email</label>
@@ -17,6 +18,6 @@
         <label for="Password">Password</label>
         <input type="password" id="Password" asp-for="Password" class="form-control" />
         <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
+    </div><br />
     <button type="submit" class="btn btn-primary">Register</button>
 </form>

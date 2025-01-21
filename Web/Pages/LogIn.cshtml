@@ -1,12 +1,13 @@
-﻿@page
+﻿@* LogIn.cshtml *@
+@page
 @model Web.Pages.LogInModel
 @{
     ViewData["Title"] = "Log In";
 }
 
-<h2>Log In</h2>
+<h2 style="margin-top:10rem;margin-bottom:-8rem; margin-right:25rem;margin-left:25rem;">Log In</h2>
 
-<form method="post">
+<form method="post" style="border-color:solid black; margin:10rem;margin-right:25rem;margin-left:25rem;">
     <div class="form-group">
         <label for="Email">Email</label>
         <input type="email" id="Email" asp-for="Email" class="form-control" />
@@ -16,12 +17,12 @@
         <label for="Password">Password</label>
         <input type="password" id="Password" asp-for="Password" class="form-control" />
         <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
+    </div><br />
     <button type="submit" class="btn btn-primary">Log In</button>
 </form>
 
 <div>
-    <p>Don't have an account? <a asp-page="/Register">Register here</a>.</p>
+    <p style="margin:10rem;margin-right:25rem;margin-left:25rem;">Don't have an account? <a asp-page="/Register">Register here</a>.</p>
 </div>
 
 @section Scripts {

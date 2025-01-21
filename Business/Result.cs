@@ -11,6 +11,8 @@ namespace Business
         public bool Success { get; set; }
         public string Message { get; set; } = "Successful";
         public object? Data { get; set; }
+        public bool IsSuccess { get; set; }
+
         public Result(bool Success, string Message, object? Data = null)
         {
             this.Success = Success;

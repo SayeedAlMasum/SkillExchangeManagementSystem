@@ -28,7 +28,7 @@ namespace Business.Services
 
             // Create a new user object and populate its properties
             UserInfo userInfo = new UserInfo();
-            userInfo.Name = user.FullName;
+            userInfo.Name = user.Name;
             userInfo.Email = user.Email;
 
             // Hash the user's password for security
