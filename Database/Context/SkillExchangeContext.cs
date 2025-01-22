@@ -19,6 +19,14 @@ namespace Database.Context
         public DbSet<Subscription> Subscription { get; set; }
         public DbSet<Payment> Payment { get; set; }
         public DbSet<Role> Role { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UserInfo>()
+                .ToTable("UserInfo") // Ensure no inheritance by explicitly mapping to a table
+                .HasKey(u => u.UserInfoId); // Explicitly specify the primary key
+
+            // Apply configurations for other entities if necessary
+        }
     }
 
 }

@@ -1,4 +1,5 @@
-﻿using Database.Context;
+﻿//Business/Result.cs
+using Database.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;

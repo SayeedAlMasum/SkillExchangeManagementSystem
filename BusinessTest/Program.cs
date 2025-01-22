@@ -12,35 +12,58 @@ namespace BusinessTest
         static void Main(string[] args)
         {
             Registration();
-            //LogIn();
-            //UserListTest();
-            //UserInfoTest();
+            LogIn();
+            UserListTest();
+            UserInfoTest();
         }
 
         static void Registration()
         {
-            UserRegisterForm userRegisterForm = new UserRegisterForm();
-            Console.WriteLine("Enter Name:");
-            userRegisterForm.Name = Console.ReadLine();  // Fixed property from FullName to Name
-            Console.WriteLine("Enter Email:");
-            userRegisterForm.Email = Console.ReadLine();
-            Console.WriteLine("Enter Password:");
-            userRegisterForm.Password = Console.ReadLine();
-            Result result = new UserInfoService().Registration(userRegisterForm);  // Fixed method name
-            Console.WriteLine(result.Message);
-        }
+            try
+            {
+                UserRegisterForm userRegisterForm = new UserRegisterForm();
+                Console.WriteLine("Enter Full Name:");
+                userRegisterForm.Name = Console.ReadLine();  // Use Name as defined in the model
+                Console.WriteLine("Enter the Email:");
+                userRegisterForm.Email = Console.ReadLine();
+                Console.WriteLine("Enter Password:");
+                userRegisterForm.Password = Console.ReadLine();
 
+                var userService = new UserInfoService();  // Instance of service
+                Result result = userService.Registration(userRegisterForm);  // Call registration method
+                if (result.Success)
+                {
+                    Console.WriteLine("Registration successful!");
+                }
+                else
+                {
+                    Console.WriteLine($"Registration failed: {result.Message}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
         static void LogIn()
         {
-            UserLogInForm userLoginForm = new UserLogInForm();
-            Console.WriteLine("Enter the Email:");
-            userLoginForm.Email = Console.ReadLine();
-            Console.WriteLine("Enter the Password:");
-            userLoginForm.Password = Console.ReadLine();
-            Result result = new UserInfoService().LogIn(userLoginForm);  // Fixed method name
-            Console.WriteLine(result.Message);
-        }
+            try
+            {
+                UserLogInForm userLoginForm = new UserLogInForm();
+                Console.WriteLine("Enter the Email:");
+                userLoginForm.Email = Console.ReadLine();
+                Console.WriteLine("Enter the Password:");
+                userLoginForm.Password = Console.ReadLine();
 
+                var userService = new UserInfoService();  // Instance of service
+                Result result = userService.LogIn(userLoginForm);  // Call login method
+                Console.WriteLine(result.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
         static void UserListTest()
         {
             Result result = new UserInfoService().List();
