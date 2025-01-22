@@ -1,7 +1,13 @@
+using Business.Services;
+using Microsoft.Extensions.DependencyInjection;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+// Register UserInfoService for dependency injection
+builder.Services.AddScoped<UserInfoService>(); // Registering UserInfoService
 
 var app = builder.Build();
 
@@ -27,6 +33,5 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapRazorPages();
 });
-
 
 app.Run();

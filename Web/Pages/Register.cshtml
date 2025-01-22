@@ -3,21 +3,36 @@
 @model Web.Pages.RegisterModel
 
 <h2 style="margin-top:10rem;margin-bottom:-8rem; margin-right:25rem;margin-left:25rem;">Register</h2>
-<form method="post" asp-page-handler="Register" style="margin:10rem;margin-right:25rem;margin-left:25rem;">
+<form method="post" asp-page-handler="/Register" style="margin:10rem;margin-right:25rem;margin-left:25rem;">
     <div class="form-group">
         <label for="Name">Name</label>
-        <input type="text" id="Name" asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+        <input type="text" id="Name" name="Name" asp-for="@Model.userRegisterForm.Name" class="form-control" />
+        <span asp-validation-for="userRegisterForm.Name" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label for="Email">Email</label>
-        <input type="email" id="Email" asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
+        <input type="email" id="Email" name="Email" asp-for="@Model.userRegisterForm.Email" class="form-control" />
+        <span asp-validation-for="userRegisterForm.Email" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label for="Password">Password</label>
-        <input type="password" id="Password" asp-for="Password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div><br />
-    <button type="submit" class="btn btn-primary">Register</button>
+        <input type="password" id="Password" name="Password" asp-for="@Model.userRegisterForm.Password" class="form-control" />
+        <span asp-validation-for="userRegisterForm.Password" class="text-danger"></span>
+    </div>
+    @* <div class="form-group"> *@
+    @*     <label for="RoleId">Role</label> *@
+    @*     <select id="RoleId" asp-for="RoleId" class="form-control"> *@
+    @*         <option value="1">Admin</option> *@
+    @*         <option value="2">Instructor</option> *@
+    @*         <option value="3" selected>Student</option> *@
+    @*     </select> *@
+    @*     <span asp-validation-for="RoleId" class="text-danger"></span> *@
+    @* </div> *@
+    <br/>
+    <button type="submit" class="btn btn-primary">Register</button> <br/> <br/>
+
+     <!-- Login Link -->
+        <p class="text-center mt-3">
+            Already have an account? <a href="/logIn">Login here</a>
+        </p>
 </form>

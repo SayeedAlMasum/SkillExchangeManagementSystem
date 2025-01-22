@@ -1,4 +1,4 @@
-﻿//Program.cs
+﻿//BusinessTest/Program.cs
 using Business;
 using Business.FormModel;
 using Business.Services;
@@ -11,39 +11,56 @@ namespace BusinessTest
     {
         static void Main(string[] args)
         {
-            RegistrationTest();
-            LoginTest();
-            UserListTest();
+            Registration();
+            //LogIn();
+            //UserListTest();
+            //UserInfoTest();
         }
 
-        static void RegistrationTest()
+        static void Registration()
         {
-            UserForm userForm = new UserForm();
-            userForm.FullName = Console.ReadLine();
-            userForm.Email = Console.ReadLine();
-            userForm.Password = Console.ReadLine();
-            Result result = new UserInfoService().Registration(userForm);
+            UserRegisterForm userRegisterForm = new UserRegisterForm();
+            Console.WriteLine("Enter Name:");
+            userRegisterForm.Name = Console.ReadLine();  // Fixed property from FullName to Name
+            Console.WriteLine("Enter Email:");
+            userRegisterForm.Email = Console.ReadLine();
+            Console.WriteLine("Enter Password:");
+            userRegisterForm.Password = Console.ReadLine();
+            Result result = new UserInfoService().Registration(userRegisterForm);  // Fixed method name
             Console.WriteLine(result.Message);
         }
-        static void LoginTest()
+
+        static void LogIn()
         {
-            UserLoginForm loginForm = new UserLoginForm();
-            Console.WriteLine("Email");
-            loginForm.Email = Console.ReadLine();
-            Console.WriteLine("Password");
-            loginForm.Password = Console.ReadLine();
-            Result result = new UserInfoService().Login(loginForm.Email,loginForm.Password);
+            UserLogInForm userLoginForm = new UserLogInForm();
+            Console.WriteLine("Enter the Email:");
+            userLoginForm.Email = Console.ReadLine();
+            Console.WriteLine("Enter the Password:");
+            userLoginForm.Password = Console.ReadLine();
+            Result result = new UserInfoService().LogIn(userLoginForm);  // Fixed method name
             Console.WriteLine(result.Message);
         }
+
         static void UserListTest()
         {
             Result result = new UserInfoService().List();
-
+            Console.WriteLine(result.Message);
+            if (result.Success)
+            {
+                // If result is successful, print user details
+                foreach (var user in (List<UserInfo>)result.Data)
+                {
+                    Console.WriteLine($"Name: {user.Name}, Email: {user.Email}, RoleId: {user.RoleId}");
+                }
+            }
         }
-        static void UserTest()
-        {
-            Result result = new UserInfoService().Single("UserId");
 
+        static void UserInfoTest()
+        {
+            Console.WriteLine("Enter UserId:");
+            string userInfoId = Console.ReadLine();
+            Result result = new UserInfoService().Single(userInfoId);
+            Console.WriteLine(result.Message);
         }
     }
 }

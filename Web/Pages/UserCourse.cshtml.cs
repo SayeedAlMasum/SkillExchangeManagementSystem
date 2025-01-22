@@ -1,4 +1,4 @@
-//UserCourse.cshtml
+//UserCourse.cshtml.cs
 using System.Collections.Generic;
 using Business.Services;
 using Database.Model;

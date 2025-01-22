@@ -15,64 +15,58 @@ namespace Business.Services
 
     public class UserInfoService
     {
-        
-        // Handles user registration
-        public Result Register(UserForm user)
+     SkillExchangeContext skillExchangeContext = new SkillExchangeContext();   
+   
+      public Result Registration(UserRegisterForm user)
         {
-            // Initialize the database context
-            SkillExchangeContext skillExchangeContext = new SkillExchangeContext();
+            bool x = skillExchangeContext.UserInfo.Any(
+                x => x.Email == user.Email);
+            if (x) return new Result(false,
+                "Email Already registered!");
 
-            // Check if the email is already registered
-            bool x = skillExchangeContext.UserInfo.Any(x => x.Email == user.Email);
-            if (x) return new Result(false, "Email already registered!");
-
-            // Create a new user object and populate its properties
             UserInfo userInfo = new UserInfo();
             userInfo.Name = user.Name;
             userInfo.Email = user.Email;
 
-            // Hash the user's password for security
-            userInfo.PasswordHash = new PasswordHasher<object>().HashPassword(user, user.Password);
-
-            // Assign a default role ID if none is provided
-            userInfo.RoleId = user.RoleId == 0 ? 3 : user.RoleId;
-
-            // Mark the user as active
+            userInfo.PasswordHash = new PasswordHasher<
+                UserInfo>().HashPassword(userInfo, user.Password);
             userInfo.IsActive = true;
-
-            // Add the new user to the database
             skillExchangeContext.UserInfo.Add(userInfo);
+
             try
             {
-                // Save changes to the database
                 skillExchangeContext.SaveChanges();
-                return new Result(true, "Registered Successfully!", user);
+                return new Result().DBCommit(skillExchangeContext,
+                "Registered Succefully!", null, user);
             }
             catch (Exception ex)
             {
-                // Return an error if something goes wrong during database save
-                return new Result(false, ex.Message);
+
+                return new Result(false, ex.InnerException?.Message);
+                Console.WriteLine(ex.InnerException?.Message);
             }
+
         }
-
-        // Handles user login
-        public Result LogIn(string email, string password)
+        public Result LogIn(UserLogInForm user)
         {
-            // Initialize the database context
-            using var context = new SkillExchangeContext();
+            UserInfo? userInfo = skillExchangeContext.UserInfo.Where(
+                x => x.Email == user.Email).FirstOrDefault();
 
-            // Find the user by email
-            var user = context.UserInfo.FirstOrDefault(u => u.Email == email);
-            if (user == null) return new Result(false, "User not found!");
+            if (userInfo == null) return new Result(false, "Register First");
 
-            // Verify the hashed password
-            var passwordHasher = new PasswordHasher<object>();
-            var verificationResult = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password);
+            PasswordVerificationResult HashResult = new PasswordHasher<
+                UserInfo>().VerifyHashedPassword(userInfo,
+                userInfo.PasswordHash, user.Password);
 
-            // Return success or failure based on password verification
-            return verificationResult == PasswordVerificationResult.Success
-                ? new Result(true, "Login successful!", user)
-                : new Result(false, "Invalid password!");
+            if (HashResult != PasswordVerificationResult.Failed)
+            {
+                return new Result(true, $"{userInfo.Name} successfully logged in!");
+
+            }
+            else
+            {
+                return new Result(false, "Incorrect Password!");
+            }
         }
         public Result List()
         {
@@ -91,17 +85,33 @@ namespace Business.Services
                 return new Result(false, ex.Message);
             }
         }
-        public Result Single(string userInfoId)
+        public Result AdminLogIn(UserLogInForm user)
         {
+            bool x = false;
+            if (user.Email == "admin@gmail.com") { x = true; }
+
+            UserInfo userInfo = new UserInfo();
+
+            PasswordVerificationResult HashResult = new PasswordHasher<
+                UserInfo>().VerifyHashedPassword(userInfo,
+                userInfo.PasswordHash, user.Password);
+
+            if (HashResult != PasswordVerificationResult.Failed && x == true)
+            {
+                return new Result(true, $"{userInfo.Name} successfully logged in!");
+            }
+            else
+            {
+                return new Result(false, "Invalid Input!");
+            }
+        }
+        public Result Single(string Id)
+        {
+            //logics
             try
             {
-                using var context = new SkillExchangeContext();
-                var user = context.UserInfo.FirstOrDefault(u => u.UserInfoId == userInfoId);
-
-                if (user == null)
-                    return new Result(false, "User not found.");
-
-                return new Result(true, "User retrieved successfully.", user);
+                var User = skillExchangeContext.UserInfo.Where(x => x.UserInfoId == Id).FirstOrDefault();
+                return new Result(true, "Success", User);
             }
             catch (Exception ex)
             {

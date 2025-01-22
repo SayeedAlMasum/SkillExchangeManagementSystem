@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Business.FormModel
 {
     // Represents the form used for user login
-    public class UserLoginForm
+    public class UserLogInForm
     {
        
         [Required]

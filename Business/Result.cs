@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Database.Context;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,14 +12,29 @@ namespace Business
         public bool Success { get; set; }
         public string Message { get; set; } = "Successful";
         public object? Data { get; set; }
-        public bool IsSuccess { get; set; }
-
-        public Result(bool Success, string Message, object? Data = null)
+        public Result() { }
+        public Result(bool success, string message, object? Data = null)
         {
-            this.Success = Success;
-            this.Message = Message;
+            this.Success = success;
+            this.Message = message;
             this.Data = Data;
         }
+
+        public Result DBCommit(SkillExchangeContext skillExchangeContext,
+            string Message, string? FailedMessage = null,
+            object? Data = null)
+        {
+            try
+            {
+                skillExchangeContext.SaveChanges();
+                return new Result(true, Message, null);
+            }
+            catch (Exception ex)
+            {
+                return new Result(false, FailedMessage ?? ex.Message);
+            }
+        }
+
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using Database.Context;
+﻿//DBTest/Program.cs
+using Database.Context;
 using Database.Model;
 using System.Data;
 namespace DBTest
@@ -26,20 +27,15 @@ namespace DBTest
                     }
                     db.SaveChanges();
                 }
-
-                db.SaveChanges();
-
             }
-
-
             catch (Exception ex)
             {
                 Console.WriteLine("An error occurred: " + ex.Message);
                 if (ex.InnerException != null)
-            {
-                Console.WriteLine("Inner Exception: " + ex.InnerException.Message);
+                {
+                    Console.WriteLine("Inner Exception: " + ex.InnerException.Message);
+                }
             }
-        }
 
         Console.WriteLine(DateTime.Now);
 

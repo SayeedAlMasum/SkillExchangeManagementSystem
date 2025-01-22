@@ -1,3 +1,5 @@
+//Register.cshtml.cs
+using Business;
 using Business.FormModel;
 using Business.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -6,69 +8,47 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Web.Pages
 {
-    // Represents the Razor Page Model for user registration
     public class RegisterModel : PageModel
     {
-        // Binds the Full Name input field from the form to this property
-        // Validation: Full Name is required
-        [BindProperty]
-        [Required(ErrorMessage = "Full Name is required.")]
-        public string Name { get; set; }
 
-        // Binds the Email input field from the form to this property
-        // Validation: Email is required and must follow a valid email format
         [BindProperty]
-        [Required(ErrorMessage = "Email is required.")]
-        [EmailAddress(ErrorMessage = "Invalid email address.")]
-        public string Email { get; set; }
+        public UserRegisterForm userRegisterForm { get; set; }
+        private readonly UserInfoService _userInfoService;
 
-        // Binds the Password input field from the form to this property
-        // Validation: Password is required and displayed as a password input in the form
-        [BindProperty]
-        [Required(ErrorMessage = "Password is required.")]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
+        public RegisterModel(UserInfoService userInfoService)
+        {
+            _userInfoService = userInfoService;
+        }
+        public void OnGet()
+        {
+
+        }
 
         // Handles the POST request when the user submits the registration form
-        public IActionResult OnPostRegister()
+        public IActionResult OnPost()
         {
             if (!ModelState.IsValid)
-            {
-                // Return the page with validation errors
-                return Page();
-            }
+                {
+                    return Page();
+                }
+                if (userRegisterForm == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid registration attempt");
+                    return Page();
+                }
 
-            // Create a UserForm object with the registration details
-            var userForm = new UserForm
-            {
-                Name = Name,
-                Email = Email,
-                Password = Password,
-                IsActive = true,
-                RoleId = 0 // Default role; can be set to a specific value if needed
-            };
-
-            // Create an instance of the UserInfoService
-            var userInfoService = new UserInfoService();
-
-            // Call the Registration method and capture the result
-            var result = userInfoService.Register(userForm);
-
-            // Check the result of the registration
-            if (result.Success)
-            {
-                // Redirect to the login page on successful registration
-                return RedirectToPage("/LogIn");
-            }
-            else
-            {
-                // Add a model error for registration failure
-                ModelState.AddModelError(string.Empty, result.Message);
-                return Page();
+                Result result = _userInfoService.Registration(userRegisterForm);
+                if (result.Success)
+                {
+                    return RedirectToPage("/LogIn");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid input!");
+                    return Page();
+                }
             }
         }
 
-
     }
-}
         
