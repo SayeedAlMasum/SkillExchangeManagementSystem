@@ -17,13 +17,13 @@ namespace Business.Services
     {
         
         // Handles user registration
-        public Result Registration(UserForm user)
+        public Result Register(UserForm user)
         {
             // Initialize the database context
-            SkillExchangeContext SkillExchangeContext = new SkillExchangeContext();
+            SkillExchangeContext skillExchangeContext = new SkillExchangeContext();
 
             // Check if the email is already registered
-            bool x = SkillExchangeContext.UserInfo.Any(x => x.Email == user.Email);
+            bool x = skillExchangeContext.UserInfo.Any(x => x.Email == user.Email);
             if (x) return new Result(false, "Email already registered!");
 
             // Create a new user object and populate its properties
@@ -41,11 +41,11 @@ namespace Business.Services
             userInfo.IsActive = true;
 
             // Add the new user to the database
-            SkillExchangeContext.UserInfo.Add(userInfo);
+            skillExchangeContext.UserInfo.Add(userInfo);
             try
             {
                 // Save changes to the database
-                SkillExchangeContext.SaveChanges();
+                skillExchangeContext.SaveChanges();
                 return new Result(true, "Registered Successfully!", user);
             }
             catch (Exception ex)
@@ -56,7 +56,7 @@ namespace Business.Services
         }
 
         // Handles user login
-        public Result Login(string email, string password)
+        public Result LogIn(string email, string password)
         {
             // Initialize the database context
             using var context = new SkillExchangeContext();

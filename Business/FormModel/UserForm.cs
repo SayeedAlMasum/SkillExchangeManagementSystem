@@ -25,9 +25,11 @@ namespace Business.FormModel
         public string? Password { get; set; }
 
         // Indicates whether the user is active
+        [Required]
         public bool IsActive { get; set; }
 
         // Role ID for the user (defaults to a specific value in the service if not provided)
+        [Required]
         public int RoleId { get; set; }
     }
 }

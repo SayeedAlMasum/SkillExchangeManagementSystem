@@ -52,7 +52,7 @@ namespace Web.Pages
             var userInfoService = new UserInfoService();
 
             // Call the Registration method and capture the result
-            var result = userInfoService.Registration(userForm);
+            var result = userInfoService.Register(userForm);
 
             // Check the result of the registration
             if (result.Success)
