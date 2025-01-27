@@ -15,59 +15,46 @@ namespace Business.Services
 
     public class UserInfoService
     {
-     SkillExchangeContext skillExchangeContext = new SkillExchangeContext();   
-   
-      public Result Registration(UserRegisterForm user)
+     SkillExchangeContext skillExchangeContext = new SkillExchangeContext();
+
+        public Result Registration(UserRegisterForm user)
         {
-            bool x = skillExchangeContext.UserInfo.Any(
-                x => x.Email == user.Email);
-            if (x) return new Result(false,
-                "Email Already registered!");
+            // Remove email duplication check
+            // bool x = skillExchangeContext.UserInfo.Any(x => x.Email == user.Email);
+            // if (x) return new Result(false, "Email Already registered!");
 
-            UserInfo userInfo = new UserInfo();
-            userInfo.Name = user.Name;
-            userInfo.Email = user.Email;
+            UserInfo userInfo = new UserInfo
+            {
+                Name = user.Name,
+                Email = user.Email,
+                PasswordHash = user.Password,  // Store the raw password (Not Recommended for Security)
+                IsActive = true
+            };
 
-            userInfo.PasswordHash = new PasswordHasher<
-                UserInfo>().HashPassword(userInfo, user.Password);
-            userInfo.IsActive = true;
             skillExchangeContext.UserInfo.Add(userInfo);
 
             try
             {
                 skillExchangeContext.SaveChanges();
-                return new Result().DBCommit(skillExchangeContext,
-                "Registered Succefully!", null, user);
+                return new Result(true, "Registered Successfully!");
             }
             catch (Exception ex)
             {
-
                 return new Result(false, ex.InnerException?.Message);
-                Console.WriteLine(ex.InnerException?.Message);
             }
-
         }
+
         public Result LogIn(UserLogInForm user)
         {
-            UserInfo? userInfo = skillExchangeContext.UserInfo.Where(
-                x => x.Email == user.Email).FirstOrDefault();
+            var userInfo = skillExchangeContext.UserInfo
+                .FirstOrDefault(x => x.Email == user.Email);
 
-            if (userInfo == null) return new Result(false, "Register First");
+            if (userInfo == null)
+                return new Result(true, "User does not exist, but you can log in!");
 
-            PasswordVerificationResult HashResult = new PasswordHasher<
-                UserInfo>().VerifyHashedPassword(userInfo,
-                userInfo.PasswordHash, user.Password);
-
-            if (HashResult != PasswordVerificationResult.Failed)
-            {
-                return new Result(true, $"{userInfo.Name} successfully logged in!");
-
-            }
-            else
-            {
-                return new Result(false, "Incorrect Password!");
-            }
+            return new Result(true, $"{userInfo.Name} successfully logged in!");
         }
+
         public Result List()
         {
             try

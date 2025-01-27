@@ -21,25 +21,17 @@ namespace Web.Pages
             return Page(); 
         }
 
-     
+
         public IActionResult OnPost()
         {
-        
             if (!ModelState.IsValid)
             {
-                return Page(); 
+                return Page();
             }
 
-          
-            if (Email == "admin@example.com" && Password == "password123")
-            {
-                // If login is successful, redirect to a protected page (e.g., Dashboard)
-                return RedirectToPage("/Dashboard");
-            }
-
-            // If login fails, add a model error and redisplay the login page
-            ModelState.AddModelError(string.Empty, "Invalid email or password.");
-            return Page();
+            // Bypass authentication checks and redirect
+            return RedirectToPage("/Dashboard");
         }
+
     }
 }

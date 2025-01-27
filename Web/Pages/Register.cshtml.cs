@@ -28,27 +28,21 @@ namespace Web.Pages
         public IActionResult OnPost()
         {
             if (!ModelState.IsValid)
-                {
-                    return Page();
-                }
-                if (userRegisterForm == null)
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid registration attempt");
-                    return Page();
-                }
-
-                Result result = _userInfoService.Registration(userRegisterForm);
-                if (result.Success)
-                {
-                    return RedirectToPage("/LogIn");
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid input!");
-                    return Page();
-                }
+            {
+                return Page();
             }
+
+            if (userRegisterForm == null)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid registration attempt");
+                return Page();
+            }
+
+            // Bypass service call and allow any registration
+            return RedirectToPage("/LogIn");
         }
 
     }
+
+}
         
