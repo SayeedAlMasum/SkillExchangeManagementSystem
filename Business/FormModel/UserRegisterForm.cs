@@ -19,7 +19,6 @@ namespace Business.FormModel
         [Required, MinLength(8)]
         public string? Password { get; set; }
 
-        [Required]
         public int RoleId { get; set; }  // Add this for role selection
     }
 

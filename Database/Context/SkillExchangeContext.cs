@@ -9,7 +9,9 @@ namespace Database.Context
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=DESKTOP-5NMO71P;Database=SkillExchangeManagementSystem;Trusted_Connection=True;TrustServerCertificate=True;ConnectRetryCount=0").LogTo(Console.WriteLine, LogLevel.Information); ;
+            //optionsBuilder.UseSqlServer(@"Server=DESKTOP-5NMO71P;Database=SkillExchangeManagementSystem;Trusted_Connection=True;TrustServerCertificate=True;ConnectRetryCount=0").LogTo(Console.WriteLine, LogLevel.Information); ;
+            optionsBuilder.UseSqlServer(@"Server=ASUS;Database=SkillExchangeManagementSystem;Trusted_Connection=True;TrustServerCertificate=True;ConnectRetryCount=0").LogTo(Console.WriteLine, LogLevel.Information); ;
+
             //optionsBuilder.UseSqlServer(@"Server=DESKTOP-1H8PV8J\SQLEXPRESS01;Database=SkillExchangeManagementSystem;Trusted_Connection=True;TrustServerCertificate=True;ConnectRetryCount=0");
         }
         public DbSet<UserInfo> UserInfo { get; set; }
@@ -21,14 +23,6 @@ namespace Database.Context
         public DbSet<Payment> Payment { get; set; }
         public DbSet<Role> Role { get; set; }
         public DbSet<UserRoleInfo> UserRoleInfo { get; set; }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<UserInfo>()
-                .ToTable("UserInfo") // Ensure no inheritance by explicitly mapping to a table
-                .HasKey(u => u.UserInfoId); // Explicitly specify the primary key
-
-            // Apply configurations for other entities if necessary
-        }
     }
 
 }
