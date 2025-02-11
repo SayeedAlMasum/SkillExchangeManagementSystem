@@ -1,7 +1,6 @@
 // Course.cshtml.cs
 using System.Collections.Generic;
 using Business.Services;
-using Database.Context;
 using Database.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -10,73 +9,75 @@ namespace Web.Pages
 {
     public class CourseModel : PageModel
     {
+        private readonly CourseService _courseService;
+
+        public CourseModel()
+        {
+            _courseService = new CourseService();
+        }
+
         public List<Course> Courses { get; set; } = new List<Course>();
 
         [BindProperty]
         public Course Course { get; set; } = new Course();
 
-        // OnGet method to load all courses for displaying in the list
         public void OnGet()
         {
-            var result = new CourseService().List();  // Get courses from the service
+            var result = _courseService.List();
             if (result.Success)
             {
                 Courses = (List<Course>)result.Data;
             }
         }
 
-        // OnPost method for adding a new course
         public IActionResult OnPost()
         {
+            // Check if the model is valid
             if (ModelState.IsValid)
             {
-                // Set the course creation date (optional)
-                Course.CreatedDate = DateTime.Now;
+                // Call the AddCourse method from _courseService and pass the Course object
+                var result = _courseService.AddCourse(Course);
 
-                // Save the course to the database (both premium and non-premium)
-                using (var context = new SkillExchangeContext())
+                // If the result is successful, redirect to the Course page
+                if (result.Success)
                 {
-                    context.Course.Add(Course);  // Add course to the database
-                    context.SaveChanges();  // Save changes to the database
+                    return RedirectToPage("/Course");
                 }
 
-                return RedirectToPage("/Course");  // Redirect to the course page after saving
+                // If there is an error, add the error message to the ModelState
+                ModelState.AddModelError("", result.Message);
             }
 
-            // If model state is invalid, reload the page with the errors
+            // Re-render the page in case of failure or invalid model
             OnGet();
+
+            // Return the current page
             return Page();
         }
-        // OnPost method for updating an existing course
+
+
         public IActionResult OnPostUpdate()
         {
             if (ModelState.IsValid)
             {
-                var result = new CourseService().UpdateCourse(Course);
+                var result = _courseService.UpdateCourse(Course);
                 if (result.Success)
                 {
-                    return RedirectToPage("/Course"); // Redirect to the course list after updating
+                    return RedirectToPage("/Course");
                 }
-
-                // Handle update failure (e.g., display an error message)
                 ModelState.AddModelError("", result.Message);
             }
-
-            // If the model state is invalid, reload the page with errors
             OnGet();
             return Page();
         }
 
-        // OnPost method for deleting a course
         public IActionResult OnPostDelete(int id)
         {
-            var result = new CourseService().DeleteCourse(id);
+            var result = _courseService.DeleteCourse(id);
             if (result.Success)
             {
-                return RedirectToPage("/Course"); // Redirect to the course list after deletion
+                return RedirectToPage("/Course");
             }
-
-            // Handle deletion failure (e.g., display an error message)
             ModelState.AddModelError("", result.Message);
             OnGet();
             return Page();

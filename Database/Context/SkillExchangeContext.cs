@@ -9,8 +9,8 @@ namespace Database.Context
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseSqlServer(@"Server=DESKTOP-5NMO71P;Database=SkillExchangeManagementSystem;Trusted_Connection=True;TrustServerCertificate=True;ConnectRetryCount=0").LogTo(Console.WriteLine, LogLevel.Information); ;
-            optionsBuilder.UseSqlServer(@"Server=ASUS;Database=SkillExchangeManagementSystem;Trusted_Connection=True;TrustServerCertificate=True;ConnectRetryCount=0").LogTo(Console.WriteLine, LogLevel.Information); ;
+            optionsBuilder.UseSqlServer(@"Server=DESKTOP-5NMO71P;Database=SkillExchangeManagementSystem;Trusted_Connection=True;TrustServerCertificate=True;ConnectRetryCount=0").LogTo(Console.WriteLine, LogLevel.Information); ;
+            //optionsBuilder.UseSqlServer(@"Server=ASUS;Database=SkillExchangeManagementSystem;Trusted_Connection=True;TrustServerCertificate=True;ConnectRetryCount=0").LogTo(Console.WriteLine, LogLevel.Information); ;
 
             //optionsBuilder.UseSqlServer(@"Server=DESKTOP-1H8PV8J\SQLEXPRESS01;Database=SkillExchangeManagementSystem;Trusted_Connection=True;TrustServerCertificate=True;ConnectRetryCount=0");
         }

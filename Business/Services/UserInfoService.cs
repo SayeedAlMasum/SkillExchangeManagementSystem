@@ -13,23 +13,42 @@ using Business.Services;
 namespace Business.Services
 {
 
-        public class UserInfoService
-        {
-            SkillExchangeContext skillExchangeContext = new SkillExchangeContext();
-            public Result Registration(UserRegisterForm user)
-            {
-                bool x = skillExchangeContext.UserInfo.Any(x => x.Email == user.Email);
-                if (x) return new Result(false, "Email already registered!");
-                UserInfo userInfo = new UserInfo();
-                userInfo.Name = user.Name;
-                userInfo.Email = user.Email;
-                userInfo.PasswordHash = new PasswordHasher<UserInfo>().HashPassword(userInfo, user.Password);
-                userInfo.RoleId = user.RoleId == 0 ? 3 : user.RoleId;
-                userInfo.IsActive = true;
-                skillExchangeContext.UserInfo.Add(userInfo);
-                return new Result().DBCommit(skillExchangeContext, "Registered Successfully!", null, user);
-            }
+    public class UserInfoService
+    {
+        // Initialize the database context to interact with the database
+        SkillExchangeContext skillExchangeContext = new SkillExchangeContext();
 
+        // Method to handle the registration of a new user
+        public Result Registration(UserRegisterForm user)
+        {
+            // Check if a user already exists with the given email
+            bool x = skillExchangeContext.UserInfo.Any(x => x.Email == user.Email);
+
+            // If the email is already registered, return a failure result with an error message
+            if (x) return new Result(false, "Email already registered!");
+
+            // Create a new UserInfo object to store user data
+            UserInfo userInfo = new UserInfo();
+
+            // Assign the name, email, and other details to the new UserInfo object
+            userInfo.Name = user.Name;
+            userInfo.Email = user.Email;
+
+            // Hash the password before saving it to the database
+            userInfo.PasswordHash = new PasswordHasher<UserInfo>().HashPassword(userInfo, user.Password);
+
+            // If the RoleId is 0, default it to 3 (Student), otherwise use the provided RoleId
+            userInfo.RoleId = user.RoleId == 0 ? 3 : user.RoleId;
+
+            // Set the user's status to active (true)
+            userInfo.IsActive = true;
+
+            // Add the new UserInfo object to the UserInfo table in the database
+            skillExchangeContext.UserInfo.Add(userInfo);
+
+            // Commit the changes to the database and return a success result with a success message
+            return new Result().DBCommit(skillExchangeContext, "Registered Successfully!", null, user);
+        }
 
 
         public Result LogIn(UserLogInForm user)
