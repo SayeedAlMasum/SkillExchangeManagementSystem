@@ -21,52 +21,61 @@ namespace Business.Services
         // Method to handle the registration of a new user
         public Result Registration(UserRegisterForm user)
         {
-            // Check if a user already exists with the given email
-            bool x = skillExchangeContext.UserInfo.Any(x => x.Email == user.Email);
+            if (skillExchangeContext.UserInfo.Any(x => x.Email == user.Email))
+                return new Result(false, "Email already registered!");
 
-            // If the email is already registered, return a failure result with an error message
-            if (x) return new Result(false, "Email already registered!");
+            var userInfo = new UserInfo
+            {
+                Name = user.Name,
+                Email = user.Email,
+                PasswordHash = new PasswordHasher<UserInfo>().HashPassword(null, user.Password),
+                RoleId = 3, // Default to Student
+                IsActive = true,
+                Location = "Unknown"  // Ensure Location is never NULL
 
-            // Create a new UserInfo object to store user data
-            UserInfo userInfo = new UserInfo();
+            };
 
-            // Assign the name, email, and other details to the new UserInfo object
-            userInfo.Name = user.Name;
-            userInfo.Email = user.Email;
-
-            // Hash the password before saving it to the database
-            userInfo.PasswordHash = new PasswordHasher<UserInfo>().HashPassword(userInfo, user.Password);
-
-            // If the RoleId is 0, default it to 3 (Student), otherwise use the provided RoleId
-            userInfo.RoleId = user.RoleId == 0 ? 3 : user.RoleId;
-
-            // Set the user's status to active (true)
-            userInfo.IsActive = true;
-
-            // Add the new UserInfo object to the UserInfo table in the database
             skillExchangeContext.UserInfo.Add(userInfo);
+            skillExchangeContext.SaveChanges();
 
-            // Commit the changes to the database and return a success result with a success message
-            return new Result().DBCommit(skillExchangeContext, "Registered Successfully!", null, user);
+            return new Result(true, "Registered Successfully!");
         }
-
-
         public Result LogIn(UserLogInForm user)
         {
-            UserInfo? userInfo = skillExchangeContext.UserInfo.Where(x => x.Email == user.Email).FirstOrDefault();
-            if (userInfo == null) return new Result(false, "Register First!");
+            var userInfo = skillExchangeContext.UserInfo.FirstOrDefault(x => x.Email == user.Email);
 
-            PasswordVerificationResult HashResult = new PasswordHasher<UserInfo>().VerifyHashedPassword(userInfo, userInfo.PasswordHash, user.Password);
-            if (HashResult != PasswordVerificationResult.Failed)
+            if (userInfo == null)
+            {
+                return new Result(false, "Email not found. Please register first.");
+            }
+            // Handle NULL values safely
+            string location = userInfo.Location ?? "Unknown"; // Assign a default value if NULL
+
+            Console.WriteLine($"User found: Email={userInfo.Email}, PasswordHash={userInfo.PasswordHash}, Location={location}");
+
+
+            if (string.IsNullOrEmpty(userInfo.PasswordHash))  // Check if the PasswordHash is null or empty
+            {
+                return new Result(false, "Password hash not found. Please try again.");
+            }
+
+            var passwordVerification = new PasswordHasher<UserInfo>().VerifyHashedPassword(userInfo, userInfo.PasswordHash, user.Password);
+
+            if (passwordVerification == PasswordVerificationResult.Success)
             {
                 return new Result(true, $"{userInfo.Name} successfully logged in!");
             }
             else
             {
-                return new Result(false, "Incorrect Password");
+                return new Result(false, "Incorrect password.");
             }
         }
-        public Result Update(UserForm user)
+
+
+
+
+
+        public Result Update(UserRegisterForm user)
         {
             //logics
             return new Result().DBCommit(skillExchangeContext, "Updated Successfully!", null, user);

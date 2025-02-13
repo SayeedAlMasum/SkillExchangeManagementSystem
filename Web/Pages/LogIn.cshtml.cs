@@ -1,36 +1,31 @@
 //LogIn.cshtml.cs
+using Business;
+using Business.FormModel;
+using Business.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Web.Pages
 {
- 
     public class LogInModel : PageModel
     {
- 
         [BindProperty]
-        public string Email { get; set; }
-
-
-        [BindProperty]
-        public string Password { get; set; }
-
-
-        public IActionResult OnGet()
+        public UserLogInForm userLogInForm { get; set; }
+        public void OnGet()
         {
-            return Page(); 
         }
-
-
         public IActionResult OnPost()
         {
-            if (!ModelState.IsValid)
+            Result result = new UserInfoService().LogIn(userLogInForm);
+            if (result.Success)
             {
-                return Page();
+                return RedirectToPage("/Index"); // Change to a page you want after login
             }
-
-            // Bypass authentication checks and redirect
-            return RedirectToPage("/Dashboard");
+            else
+            {
+                ModelState.AddModelError(string.Empty, result.Message); // Show error in UI
+                return Page(); // Return to the same page with validation errors
+            }
         }
 
     }

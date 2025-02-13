@@ -10,7 +10,7 @@ namespace Database.Model
         [MaxLength(128)]
         public string UserInfoId { get; set; } = Guid.NewGuid().ToString(); // Primary key
 
-        [Required]
+        [Required]   
         [MaxLength(50)]
         public string Name { get; set; } // Non-nullable with max length
 
@@ -27,7 +27,6 @@ namespace Database.Model
 
         public bool IsActive { get; set; } = true; // Default to active
 
-        [Required]
         public int RoleId { get; set; } // Foreign key for Role table
     }
 }

@@ -1,12 +1,14 @@
-﻿//UserLogIn.cs
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Business.FormModel
 {
-    // Represents the form used for user login
     public class UserLogInForm
     {
-       
         [Required]
         public string? Email { get; set; }
 
