@@ -31,7 +31,7 @@ namespace Web.Pages
             }
 
             // Ensure the role is either "Student" or "Teacher"
-            if (userRegisterForm.Role != "Student" && userRegisterForm.Role != "Teacher")
+            if (userRegisterForm.Role != "Student" && userRegisterForm.Role != "Teacher" && userRegisterForm.Role != "Admin")
             {
                 ModelState.AddModelError("", "Invalid role selected.");
                 return Page();

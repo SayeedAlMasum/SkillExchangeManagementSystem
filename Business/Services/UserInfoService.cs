@@ -24,18 +24,12 @@ namespace Business.Services
             if (skillExchangeContext.UserInfo.Any(x => x.Email == user.Email))
                 return new Result(false, "Email already registered!");
 
-            //// Ensure the role is either "Student" or "Teacher"
-            if (role != "Student" && role != "Teacher")
-            {
-                return new Result(false, "Invalid role selected.");
-            }
-
             var userInfo = new UserInfo
             {
                 Name = user.Name,
                 Email = user.Email,
                 PasswordHash = new PasswordHasher<UserInfo>().HashPassword(null, user.Password),
-                Role = role,
+                Role = role, // Set the role here
                 IsActive = true,
                 Location = "Unknown"
             };
