@@ -7,6 +7,7 @@ namespace Database.Context
 {
     public class SkillExchangeContext : DbContext
     {
+      
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Server=DESKTOP-5NMO71P;Database=SkillExchangeManagementSystem;Trusted_Connection=True;TrustServerCertificate=True;ConnectRetryCount=0")

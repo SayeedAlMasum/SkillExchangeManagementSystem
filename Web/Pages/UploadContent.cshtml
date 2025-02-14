@@ -1,0 +1,32 @@
+﻿@* UploadContent.cshtml *@
+@page
+@model Web.Pages.UploadContentModel
+
+<h2>Upload Content for Course: @(Model.Course?.Title ?? "Unknown Course")</h2>
+
+
+<form method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="Title">Title</label>
+        <input type="text" asp-for="ContentData.Title" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="Description">Description</label>
+        <textarea asp-for="ContentData.Description" class="form-control" required></textarea>
+    </div>
+    <div class="form-group">
+        <label for="Type">Type</label>
+        <select asp-for="ContentData.Type" class="form-control" required>
+            <option value="">Select Type</option>
+            <option value="Video">Video</option>
+            <option value="Document">Document</option>
+            <option value="Quiz">Quiz</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="File">Upload File</label>
+        <input type="file" asp-for="File" class="form-control" required />
+    </div>
+    <input type="hidden" asp-for="CourseId" />
+    <button type="submit" class="btn btn-primary">Upload</button>
+</form>

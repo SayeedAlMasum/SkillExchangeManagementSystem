@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using Business.Services;
 using Database.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Web.Pages
 {
+    [Authorize(Roles = "Student,Teacher,Admin")]  // Only authenticated users can access this page
     public class UserCoursesModel : PageModel
     {
         public List<Course> Courses { get; set; } = new List<Course>();

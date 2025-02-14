@@ -11,16 +11,16 @@ namespace Business.FormModel
     public class UserRegisterForm
     {
         [Required, MaxLength(50)]
-        public string? Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [Required]
-        public string? Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         [Required, MinLength(8)]
-        public string? Password { get; set; }
+        public string Password { get; set; } = string.Empty;
 
-
-        //public int RoleId { get; set; }  // Add this for role selection
+        [Required]
+        public string Role { get; set; } = string.Empty; // Add this property for role selection
     }
 
 }

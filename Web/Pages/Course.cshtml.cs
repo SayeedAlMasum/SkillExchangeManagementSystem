@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using Business.Services;
 using Database.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Web.Pages
 {
+    [Authorize(Roles = "Admin")]
     public class CourseModel : PageModel
     {
         private readonly CourseService _courseService;
@@ -32,34 +34,42 @@ namespace Web.Pages
 
         public IActionResult OnPost()
         {
-            // Check if the model is valid
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                // Call the AddCourse method from _courseService and pass the Course object
-                var result = _courseService.AddCourse(Course);
-
-                // If the result is successful, redirect to the Course page
-                if (result.Success)
+                // Log validation errors
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
                 {
-                    return RedirectToPage("/Course");
+                    Console.WriteLine(error.ErrorMessage);
                 }
-
-                // If there is an error, add the error message to the ModelState
-                ModelState.AddModelError("", result.Message);
+                return Page();
             }
 
-            // Re-render the page in case of failure or invalid model
-            OnGet();
+            // Log the course data before saving
+            Console.WriteLine($"Title: {Course.Title}, Description: {Course.Description}, Category: {Course.Category}, SubCategory: {Course.SubCategory}, IsPremium: {Course.IsPremium}");
 
-            // Return the current page
+            // Set the CreatedBy field to the current user's name
+            Course.CreatedBy = User.Identity?.Name ?? "System";
+
+            var result = _courseService.AddCourse(Course);
+            if (result.Success)
+            {
+                return RedirectToPage("/Course");
+            }
+
+            // Log the error message
+            Console.WriteLine(result.Message);
+
+            ModelState.AddModelError("", result.Message);
+            OnGet();
             return Page();
         }
-
-
         public IActionResult OnPostUpdate()
         {
             if (ModelState.IsValid)
             {
+                // Set the UpdatedBy field to the current user's name
+                Course.UpdatedBy = User.Identity?.Name ?? "System";
+
                 var result = _courseService.UpdateCourse(Course);
                 if (result.Success)
                 {
@@ -82,5 +92,6 @@ namespace Web.Pages
             OnGet();
             return Page();
         }
+
     }
 }

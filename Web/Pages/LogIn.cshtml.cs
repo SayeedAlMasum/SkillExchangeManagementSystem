@@ -1,7 +1,9 @@
 //LogIn.cshtml.cs
+using System.Security.Claims;
 using Business;
 using Business.FormModel;
 using Business.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -19,12 +21,22 @@ namespace Web.Pages
             Result result = new UserInfoService().LogIn(userLogInForm);
             if (result.Success)
             {
-                return RedirectToPage("/Index"); // Change to a page you want after login
+                var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, userLogInForm.Email ?? string.Empty),
+            new Claim(ClaimTypes.Role, result.Data?.ToString() ?? "Student") // Default role
+        };
+
+                var identity = new ClaimsIdentity(claims, "login");
+                var principal = new ClaimsPrincipal(identity);
+                HttpContext.SignInAsync(principal);
+
+                return RedirectToPage("/Index");
             }
             else
             {
-                ModelState.AddModelError(string.Empty, result.Message); // Show error in UI
-                return Page(); // Return to the same page with validation errors
+                ModelState.AddModelError(string.Empty, result.Message);
+                return Page();
             }
         }
 

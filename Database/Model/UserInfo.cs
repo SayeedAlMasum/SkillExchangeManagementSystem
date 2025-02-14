@@ -8,25 +8,27 @@ namespace Database.Model
     {
         [Key]
         [MaxLength(128)]
-        public string UserInfoId { get; set; } = Guid.NewGuid().ToString(); // Primary key
+        public string UserInfoId { get; set; } = Guid.NewGuid().ToString();
 
-        [Required]   
+        [Required]
         [MaxLength(50)]
-        public string Name { get; set; } // Non-nullable with max length
+        public string Name { get; set; } = string.Empty;
 
         [Required]
         [MaxLength(50)]
         [EmailAddress]
-        public string Email { get; set; } // Non-nullable, email validation
+        public string Email { get; set; } = string.Empty;
 
         [Required]
-        public string PasswordHash { get; set; } // Non-nullable, hashed passwords only
+        public string PasswordHash { get; set; } = string.Empty;
 
         [MaxLength(50)]
-        public string Location { get; set; } // Optional field
+        public string Location { get; set; } = "Unknown";
 
-        public bool IsActive { get; set; } = true; // Default to active
+        public bool IsActive { get; set; } = true;
 
-        public int RoleId { get; set; } // Foreign key for Role table
+        [Required]
+        public string Role { get; set; } = "Student"; // Add this property for role management
+        public int RoleId { get; set; }
     }
 }

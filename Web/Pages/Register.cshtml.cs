@@ -10,10 +10,19 @@ namespace Web.Pages
     public class RegisterModel : PageModel
     {
         [BindProperty]
-        public UserRegisterForm userRegisterForm { get; set; }
+        public UserRegisterForm userRegisterForm { get; set; } = new UserRegisterForm();
+
+        private readonly UserInfoService _userInfoService;
+
+        public RegisterModel(UserInfoService userInfoService)
+        {
+            _userInfoService = userInfoService;
+        }
+
         public void OnGet()
         {
         }
+
         public IActionResult OnPost()
         {
             if (!ModelState.IsValid)
@@ -21,10 +30,24 @@ namespace Web.Pages
                 return Page();
             }
 
-            Result result = new UserInfoService().Registration(userRegisterForm);
+            // Ensure the role is either "Student" or "Teacher"
+            if (userRegisterForm.Role != "Student" && userRegisterForm.Role != "Teacher")
+            {
+                ModelState.AddModelError("", "Invalid role selected.");
+                return Page();
+            }
+
+            // Register the user with the selected role
+            Result result = _userInfoService.Registration(userRegisterForm, userRegisterForm.Role);
             if (result.Success)
+            {
                 return RedirectToPage("/LogIn");
-            else return Page();
+            }
+            else
+            {
+                ModelState.AddModelError("", result.Message);
+                return Page();
+            }
         }
     }
 }

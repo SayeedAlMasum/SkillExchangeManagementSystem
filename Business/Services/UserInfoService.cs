@@ -19,20 +19,25 @@ namespace Business.Services
         SkillExchangeContext skillExchangeContext = new SkillExchangeContext();
 
         // Method to handle the registration of a new user
-        public Result Registration(UserRegisterForm user)
+        public Result Registration(UserRegisterForm user, string role)
         {
             if (skillExchangeContext.UserInfo.Any(x => x.Email == user.Email))
                 return new Result(false, "Email already registered!");
+
+            //// Ensure the role is either "Student" or "Teacher"
+            if (role != "Student" && role != "Teacher")
+            {
+                return new Result(false, "Invalid role selected.");
+            }
 
             var userInfo = new UserInfo
             {
                 Name = user.Name,
                 Email = user.Email,
                 PasswordHash = new PasswordHasher<UserInfo>().HashPassword(null, user.Password),
-                RoleId = 3, // Default to Student
+                Role = role,
                 IsActive = true,
-                Location = "Unknown"  // Ensure Location is never NULL
-
+                Location = "Unknown"
             };
 
             skillExchangeContext.UserInfo.Add(userInfo);
@@ -48,22 +53,13 @@ namespace Business.Services
             {
                 return new Result(false, "Email not found. Please register first.");
             }
-            // Handle NULL values safely
-            string location = userInfo.Location ?? "Unknown"; // Assign a default value if NULL
-
-            Console.WriteLine($"User found: Email={userInfo.Email}, PasswordHash={userInfo.PasswordHash}, Location={location}");
-
-
-            if (string.IsNullOrEmpty(userInfo.PasswordHash))  // Check if the PasswordHash is null or empty
-            {
-                return new Result(false, "Password hash not found. Please try again.");
-            }
 
             var passwordVerification = new PasswordHasher<UserInfo>().VerifyHashedPassword(userInfo, userInfo.PasswordHash, user.Password);
 
             if (passwordVerification == PasswordVerificationResult.Success)
             {
-                return new Result(true, $"{userInfo.Name} successfully logged in!");
+                // Return the role along with the success message
+                return new Result(true, $"{userInfo.Name} successfully logged in!", userInfo.Role);
             }
             else
             {

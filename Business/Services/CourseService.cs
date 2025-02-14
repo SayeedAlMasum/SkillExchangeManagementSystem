@@ -50,6 +50,20 @@ namespace Business.Services
         {
             try
             {
+                // Validate required fields
+                if (string.IsNullOrEmpty(course.Title))
+                    return new Result(false, "Title is required.");
+                if (string.IsNullOrEmpty(course.Description))
+                    return new Result(false, "Description is required.");
+                if (string.IsNullOrEmpty(course.Category))
+                    return new Result(false, "Category is required.");
+                if (string.IsNullOrEmpty(course.SubCategory))
+                    return new Result(false, "SubCategory is required.");
+                // Set the CourseId (if not auto-generated)
+                if (course.CourseId == 0)
+                {
+                    course.CourseId = _skillExchangeContext.Course.Max(c => c.CourseId) + 1; // Manually set CourseId
+                }
                 // Set the CreatedDate of the course to the current date and time
                 course.CreatedDate = DateTime.Now;
 
