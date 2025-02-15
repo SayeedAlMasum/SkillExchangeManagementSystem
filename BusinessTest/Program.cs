@@ -29,8 +29,8 @@ namespace BusinessTest
                 Console.WriteLine("Enter Password:");
                 userRegisterForm.Password = Console.ReadLine();
 
-                var userService = new UserInfoService();  // Instance of service
-                Result result = userService.Registration(userRegisterForm);  // Call registration method
+                var userInfoService = new UserInfoService();  // Instance of service
+                Result result = userInfoService.Registration(userRegisterForm);  // Call registration method
                 if (result.Success)
                 {
                     Console.WriteLine("Registration successful!");
