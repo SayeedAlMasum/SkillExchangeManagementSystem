@@ -31,5 +31,6 @@ namespace Database.Context
         public DbSet<Payment> Payment { get; set; }
         public DbSet<Role> Role { get; set; }
         public DbSet<UserRoleInfo> UserRoleInfo { get; set; }
+        public DbSet<PaymentMethod> PaymentMethod { get; set; }
     }
 }
