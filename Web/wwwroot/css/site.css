@@ -11,9 +11,18 @@ html {
 }
 
 body {
-    margin-bottom: 60px;
-    background-color: #f0f8ff; /* Light blue background */
-    color: #333;
+    background: url('../images/Background design.png') no-repeat fixed;
+    height: 100vh;
+    margin: 0;
+}
+.foreground {
+    position: fixed;
+    top:5rem;
+    left: 0;
+    width: 80%; /* Adjust size */
+    height: 100%;
+    background: url('../images/Man Reading Design.png') left/contain no-repeat;
+    opacity: 0.8; /* Adjust transparency */
 }
 
 /* Hero Section */
