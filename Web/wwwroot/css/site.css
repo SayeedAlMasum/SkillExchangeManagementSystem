@@ -9,13 +9,15 @@ html {
         font-size: 16px;
     }
 }
-
 body {
+    height: 100vh;
+    margin: 0;
+}
+body.landing-page{
     background: url('../images/Background design.png') no-repeat fixed;
     height: 100vh;
     margin: 0;
 }
-
 .foreground {
     position: Absolute;
     top: 5rem;
@@ -25,7 +27,9 @@ body {
     background: url('../images/Man Reading Design.png') left/contain no-repeat;
     opacity: 0.8; /* Adjust transparency */
 }
-
+body.other-page {
+    background-color: #e7feff;
+}
 /* Hero Section */
 .jumbotron {
     background: linear-gradient(45deg, #1e3c72, #2a5298); /* Blue gradient */
