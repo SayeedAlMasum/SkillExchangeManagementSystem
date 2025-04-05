@@ -1,3 +1,4 @@
+//DashBoard.cshtml.cs
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Web.Pages

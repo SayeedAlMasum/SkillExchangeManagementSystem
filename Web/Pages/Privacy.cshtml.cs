@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿//Privacy.cshtml.cs
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-
 namespace Web.Pages
 {
     public class PrivacyModel : PageModel

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿//Role.cs
+using System.ComponentModel.DataAnnotations;
 
 namespace Database.Model
 {

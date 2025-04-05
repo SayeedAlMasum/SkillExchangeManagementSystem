@@ -1,4 +1,4 @@
-//Program.cs
+//Web/Pages/Program.cs
 using Business.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
