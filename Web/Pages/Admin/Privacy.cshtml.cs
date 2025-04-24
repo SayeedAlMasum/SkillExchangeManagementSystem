@@ -1,7 +1,7 @@
 ﻿//Privacy.cshtml.cs
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-namespace Web.Pages
+namespace Web.Pages.Admin
 {
     public class PrivacyModel : PageModel
     {

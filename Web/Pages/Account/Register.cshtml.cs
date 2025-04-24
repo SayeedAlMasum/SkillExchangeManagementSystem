@@ -5,7 +5,7 @@ using Business.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Web.Pages
+namespace Web.Pages.Account
 {
     public class RegisterModel : PageModel
     {

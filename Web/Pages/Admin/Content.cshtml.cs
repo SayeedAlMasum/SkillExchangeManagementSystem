@@ -5,7 +5,7 @@ using Business.Services;
 using Database.Model;
 using System;
 
-namespace Web.Pages
+namespace Web.Pages.Admin
 {
     public class ContentModel : PageModel
     {

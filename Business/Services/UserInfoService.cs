@@ -96,5 +96,40 @@ namespace Business.Services
                 return new Result(false, ex.Message);
             }
         }
+        public Result GeneratePasswordResetToken(string email)
+        {
+            var user = skillExchangeContext.UserInfo.FirstOrDefault(x => x.Email == email);
+            if (user == null)
+            {
+                return new Result(false, "Email not found.");
+            }
+
+            // In a real application, generate a secure token and store it with an expiration date
+            var token = Guid.NewGuid().ToString();
+
+            // Here you would typically:
+            // 1. Store the token in the database with an expiration date
+            // 2. Send an email with a link containing the token
+
+            return new Result(true, "Password reset token generated", token);
+        }
+
+        public Result ResetPassword(string email, string token, string newPassword)
+        {
+            // In a real application, you would:
+            // 1. Verify the token is valid and not expired
+            // 2. Update the password
+
+            var user = skillExchangeContext.UserInfo.FirstOrDefault(x => x.Email == email);
+            if (user == null)
+            {
+                return new Result(false, "Email not found.");
+            }
+
+            user.PasswordHash = new PasswordHasher<UserInfo>().HashPassword(null, newPassword);
+            skillExchangeContext.SaveChanges();
+
+            return new Result(true, "Password reset successfully.");
+        }
     }
 }

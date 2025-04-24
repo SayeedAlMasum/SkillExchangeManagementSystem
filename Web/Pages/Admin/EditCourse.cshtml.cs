@@ -7,7 +7,7 @@ using System;
 using Database.Context;
 using System.Linq;
 
-namespace Web.Pages
+namespace Web.Pages.Admin
 {
     public class EditCourseModel : PageModel
     {
