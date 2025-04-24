@@ -24,7 +24,7 @@ namespace Web.Pages.Admin
                 return Page();
             }
 
-            return RedirectToPage("/Course");
+            return RedirectToPage("/Admin/Course");
         }
 
         public IActionResult OnPostUpdate()
@@ -53,7 +53,7 @@ namespace Web.Pages.Admin
                         context.SaveChanges();
                     }
 
-                    return RedirectToPage("/Course");
+                    return RedirectToPage("/Admin/Course");
                 }
                 catch (Exception ex)
                 {

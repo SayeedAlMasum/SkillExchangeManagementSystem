@@ -41,7 +41,7 @@ namespace Web.Pages.Account
             Result result = _userInfoService.Registration(userRegisterForm, userRegisterForm.Role);
             if (result.Success)
             {
-                return RedirectToPage("/LogIn");
+                return RedirectToPage("/Account/LogIn");
             }
             else
             {

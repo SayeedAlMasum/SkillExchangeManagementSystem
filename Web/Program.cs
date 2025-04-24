@@ -1,11 +1,21 @@
 //Web/Pages/Program.cs
 using Business.Services;
+using Database.Context;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-
+using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<SkillExchangeContext>(options =>
+{
+    // This configuration will be used when the context is injected
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+           .LogTo(Console.WriteLine, LogLevel.Information)
+           .EnableSensitiveDataLogging();
+});
+
+// Rest of your Program.cs...
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<UserInfoService>();
 

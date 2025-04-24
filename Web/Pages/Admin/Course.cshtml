@@ -1,6 +1,6 @@
 ﻿@* Course.cshtml *@
 @page
-@model Web.Pages.CourseModel
+@model Web.Pages.Admin.CourseModel
 
 <!-- Form to Add a New Course -->
 <h3>Add New Course</h3>
@@ -73,7 +73,7 @@
                     <td>@item.SubCategory</td>
                     <td>@item.IsPremium</td>
                     <td>
-                        <a asp-page="/EditCourse" asp-route-id="@item.CourseId" class="btn btn-primary">Edit</a>
+                        <a asp-page="/Admin/EditCourse" asp-route-id="@item.CourseId" class="btn btn-primary">Edit</a>
                         <form method="post" asp-page-handler="Delete" asp-route-id="@item.CourseId" style="display:inline;">
                             <button type="submit" class="btn btn-danger">Delete</button>
                         </form>

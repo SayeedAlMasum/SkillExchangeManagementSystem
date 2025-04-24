@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Web.Pages
+namespace Web.Pages.Admin
 {
     [Authorize(Roles = "Admin")]
     public class CourseModel : PageModel
@@ -53,7 +53,7 @@ namespace Web.Pages
             var result = _courseService.AddCourse(Course);
             if (result.Success)
             {
-                return RedirectToPage("/Course");
+                return RedirectToPage("/Admin/Course");
             }
 
             // Log the error message
@@ -73,7 +73,7 @@ namespace Web.Pages
                 var result = _courseService.UpdateCourse(Course);
                 if (result.Success)
                 {
-                    return RedirectToPage("/Course");
+                    return RedirectToPage("/Admin/Course");
                 }
                 ModelState.AddModelError("", result.Message);
             }
@@ -86,7 +86,7 @@ namespace Web.Pages
             var result = _courseService.DeleteCourse(id);
             if (result.Success)
             {
-                return RedirectToPage("/Course");
+                return RedirectToPage("/Admin/Course");
             }
             ModelState.AddModelError("", result.Message);
             OnGet();

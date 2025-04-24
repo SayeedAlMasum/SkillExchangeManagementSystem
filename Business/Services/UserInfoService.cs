@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Business.Services;
+using Microsoft.EntityFrameworkCore;
 namespace Business.Services
 {
 
@@ -41,24 +42,37 @@ namespace Business.Services
         }
         public Result LogIn(UserLogInForm user)
         {
-            var userInfo = skillExchangeContext.UserInfo.FirstOrDefault(x => x.Email == user.Email);
 
-            if (userInfo == null)
+            try
             {
-                return new Result(false, "Email not found. Please register first.");
+                // Set timeout to 120 seconds (2 minutes)
+                skillExchangeContext.Database.SetCommandTimeout(120);
+                var userInfo = skillExchangeContext.UserInfo.FirstOrDefault(x => x.Email == user.Email);
+                if (userInfo == null)
+                {
+                    return new Result(false, "Email not found. Please register first.");
+                }
+
+                var passwordVerification = new PasswordHasher<UserInfo>().VerifyHashedPassword(userInfo, userInfo.PasswordHash, user.Password);
+
+                if (passwordVerification == PasswordVerificationResult.Success)
+                {
+                    // Return the role along with the success message
+                    return new Result(true, $"{userInfo.Name} successfully logged in!", userInfo.Role);
+                }
+                else
+                {
+                    return new Result(false, "Incorrect password.");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return new Result(false, "Login operation timed out. Please try again.");
             }
 
-            var passwordVerification = new PasswordHasher<UserInfo>().VerifyHashedPassword(userInfo, userInfo.PasswordHash, user.Password);
 
-            if (passwordVerification == PasswordVerificationResult.Success)
-            {
-                // Return the role along with the success message
-                return new Result(true, $"{userInfo.Name} successfully logged in!", userInfo.Role);
-            }
-            else
-            {
-                return new Result(false, "Incorrect password.");
-            }
+       
         }
 
 
@@ -98,38 +112,65 @@ namespace Business.Services
         }
         public Result GeneratePasswordResetToken(string email)
         {
-            var user = skillExchangeContext.UserInfo.FirstOrDefault(x => x.Email == email);
-            if (user == null)
+            try
             {
-                return new Result(false, "Email not found.");
+                var user = skillExchangeContext.UserInfo
+                    .FirstOrDefault(x => x.Email == email);
+
+                if (user == null)
+                {
+                    // Return success even if user not found to prevent email enumeration
+                    return new Result(true, "If your email exists in our system, you'll receive a password reset link.");
+                }
+
+                // Generate a secure token
+                var token = Guid.NewGuid().ToString();
+
+                // Set token and expiration (e.g., 1 hour)
+                user.PasswordResetToken = token;
+                user.ResetTokenExpires = DateTime.UtcNow.AddHours(1);
+                skillExchangeContext.SaveChanges();
+
+                // In production, you would send an email here with the reset link
+                // For now, we'll just return the token for testing
+                return new Result(true, "Password reset token generated", token);
             }
-
-            // In a real application, generate a secure token and store it with an expiration date
-            var token = Guid.NewGuid().ToString();
-
-            // Here you would typically:
-            // 1. Store the token in the database with an expiration date
-            // 2. Send an email with a link containing the token
-
-            return new Result(true, "Password reset token generated", token);
+            catch (Exception ex)
+            {
+                return new Result(false, ex.Message);
+            }
         }
-
         public Result ResetPassword(string email, string token, string newPassword)
         {
-            // In a real application, you would:
-            // 1. Verify the token is valid and not expired
-            // 2. Update the password
-
-            var user = skillExchangeContext.UserInfo.FirstOrDefault(x => x.Email == email);
-            if (user == null)
+            using (var transaction = skillExchangeContext.Database.BeginTransaction())
             {
-                return new Result(false, "Email not found.");
+                try
+                {
+                    var user = skillExchangeContext.UserInfo
+                        .FirstOrDefault(x => x.Email == email &&
+                                           x.PasswordResetToken == token &&
+                                           x.ResetTokenExpires > DateTime.UtcNow);
+
+                    if (user == null)
+                    {
+                        return new Result(false, "Invalid or expired password reset token.");
+                    }
+
+                    user.PasswordHash = new PasswordHasher<UserInfo>().HashPassword(null, newPassword);
+                    user.PasswordResetToken = null;
+                    user.ResetTokenExpires = null;
+
+                    skillExchangeContext.SaveChanges();
+                    transaction.Commit();
+
+                    return new Result(true, "Password reset successfully.");
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    return new Result(false, ex.Message);
+                }
             }
-
-            user.PasswordHash = new PasswordHasher<UserInfo>().HashPassword(null, newPassword);
-            skillExchangeContext.SaveChanges();
-
-            return new Result(true, "Password reset successfully.");
         }
     }
 }

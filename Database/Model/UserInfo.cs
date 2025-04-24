@@ -30,5 +30,7 @@ namespace Database.Model
         [Required]
         public string Role { get; set; } = "Student"; // Add this property for role management
         public int RoleId { get; set; }
+        public string? PasswordResetToken { get; set; }
+        public DateTime? ResetTokenExpires { get; set; }
     }
 }
