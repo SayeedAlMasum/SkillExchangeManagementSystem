@@ -21,5 +21,7 @@ namespace Database.Model
 
         [Required]
         public bool IsPremium { get; set; }
+        public string? TeacherEmail { get; set; }
+
     }
 }

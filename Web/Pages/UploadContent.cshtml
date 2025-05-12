@@ -1,32 +1,126 @@
 ﻿@* UploadContent.cshtml *@
 @page
-@model Web.Pages.UploadContentModel
+@model Web.Pages.Content.UploadContentModel
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Policy = "TeacherOnly")]
+@{
+    ViewData["Title"] = "Upload Content";
+}
 
-<h2>Upload Content for Course: @(Model.Course?.Title ?? "Unknown Course")</h2>
+<h2>Upload Content</h2>
 
+<!-- Display available courses table -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h4>Your Courses</h4>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Subcategory</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.TeacherCourses?.Any() ?? false)
+                {
+                    @foreach (var course in Model.TeacherCourses)
+                    {
+                        <tr>
+                            <td>@course.Title</td>
+                            <td>@course.Category</td>
+                            <td>@course.SubCategory</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary select-course"
+                                        data-courseid="@course.CourseId">
+                                    Select for Upload
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center">
+                            No courses available.
+                            <a asp-page="/Courses/Create">Create a course first</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 
-<form method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label for="Title">Title</label>
-        <input type="text" asp-for="ContentData.Title" class="form-control" required />
+<!-- Upload Form -->
+<div class="card">
+    <div class="card-header">
+        <h4>Upload New Content</h4>
     </div>
-    <div class="form-group">
-        <label for="Description">Description</label>
-        <textarea asp-for="ContentData.Description" class="form-control" required></textarea>
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label asp-for="Content.Title" class="font-weight-bold"></label>
+                <input asp-for="Content.Title" class="form-control" />
+                <span asp-validation-for="Content.Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Content.Description" class="font-weight-bold"></label>
+                <textarea asp-for="Content.Description" class="form-control"></textarea>
+                <span asp-validation-for="Content.Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Content.Type" class="font-weight-bold"></label>
+                <select asp-for="Content.Type" class="form-control">
+                    <option value="">-- Select content type --</option>
+                    <option value="PDF">PDF</option>
+                    <option value="Video">Video</option>
+                    <option value="Document">Document</option>
+                    <option value="Presentation">Presentation</option>
+                </select>
+                <span asp-validation-for="Content.Type" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UploadFile" class="font-weight-bold"></label>
+                <input type="file" asp-for="UploadFile" class="form-control" />
+                <span asp-validation-for="UploadFile" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Content.CourseId" class="font-weight-bold">Course <span class="text-danger">*</span></label>
+                <select asp-for="Content.CourseId" class="form-control" asp-items="Model.CourseOptions">
+                    <option value="">-- Select a course --</option>
+                </select>
+                <span asp-validation-for="Content.CourseId" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
     </div>
-    <div class="form-group">
-        <label for="Type">Type</label>
-        <select asp-for="ContentData.Type" class="form-control" required>
-            <option value="">Select Type</option>
-            <option value="Video">Video</option>
-            <option value="Document">Document</option>
-            <option value="Quiz">Quiz</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="File">Upload File</label>
-        <input type="file" asp-for="File" class="form-control" required />
-    </div>
-    <input type="hidden" asp-for="CourseId" />
-    <button type="submit" class="btn btn-primary">Upload</button>
-</form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Handle course selection from the table
+        document.querySelectorAll('.select-course').forEach(button => {
+            button.addEventListener('click', function() {
+                const courseId = this.getAttribute('data-courseid');
+                document.getElementById('Content_CourseId').value = courseId;
+
+                // Scroll to the form
+                document.querySelector('.card-body form').scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+}

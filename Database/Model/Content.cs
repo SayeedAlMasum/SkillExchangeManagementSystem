@@ -1,30 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//Content.cs
 using System.ComponentModel.DataAnnotations;
 
 namespace Database.Model
 {
     public class Content
     {
-        [Key]
         public int ContentId { get; set; }
 
-        [Required]
-        public string Title { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Title is required")]
+        public string Title { get; set; }
 
-        [Required]
-        public string Description { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Description is required")]
+        public string Description { get; set; }
 
-        [Required]
-        public string Type { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Type is required")]
+        public string Type { get; set; }
 
-        [Required]
-        public string URL { get; set; } = string.Empty;
+        public string URL { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please select a course")]
+        [Display(Name = "Course")]
         public int CourseId { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        // Navigation property
+        public Course Course { get; set; }
     }
 }

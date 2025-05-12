@@ -1,4 +1,4 @@
-﻿   // CourseService.cs
+﻿// CourseService.cs
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,11 +46,25 @@ namespace Business.Services
             }
         }
 
+        public Result ListByTeacher(string teacherEmail)
+        {
+            try
+            {
+                var courses = _skillExchangeContext.Course
+                    .Where(c => c.TeacherEmail == teacherEmail)
+                    .ToList();
+                return new Result(true, "Success", courses);
+            }
+            catch (Exception ex)
+            {
+                return new Result(false, ex.Message);
+            }
+        }
+
         public Result AddCourse(Course course)
         {
             try
             {
-                // Validate required fields
                 if (string.IsNullOrEmpty(course.Title))
                     return new Result(false, "Title is required.");
                 if (string.IsNullOrEmpty(course.Description))
@@ -59,30 +73,26 @@ namespace Business.Services
                     return new Result(false, "Category is required.");
                 if (string.IsNullOrEmpty(course.SubCategory))
                     return new Result(false, "SubCategory is required.");
-                // Set the CourseId (if not auto-generated)
+
                 if (course.CourseId == 0)
                 {
-                    course.CourseId = _skillExchangeContext.Course.Max(c => c.CourseId) + 1; // Manually set CourseId
+                    course.CourseId = _skillExchangeContext.Course.Any()
+                        ? _skillExchangeContext.Course.Max(c => c.CourseId) + 1
+                        : 1;
                 }
-                // Set the CreatedDate of the course to the current date and time
+
                 course.CreatedDate = DateTime.Now;
 
-                // Add the course to the database context
                 _skillExchangeContext.Course.Add(course);
-
-                // Save changes to the database
                 _skillExchangeContext.SaveChanges();
 
-                // Return a success result with a message
                 return new Result(true, "Course added successfully");
             }
             catch (Exception ex)
             {
-                // If an exception occurs, return a failure result with the error message
                 return new Result(false, ex.Message);
             }
         }
-
 
         public Result UpdateCourse(Course updatedCourse)
         {
@@ -93,12 +103,15 @@ namespace Business.Services
                 {
                     return new Result(false, "Course not found");
                 }
+
                 course.Title = updatedCourse.Title;
                 course.Description = updatedCourse.Description;
                 course.Category = updatedCourse.Category;
                 course.SubCategory = updatedCourse.SubCategory;
+                course.TeacherEmail = updatedCourse.TeacherEmail; // ensure this is updated
                 course.UpdatedDate = DateTime.Now;
                 course.UpdatedBy = updatedCourse.UpdatedBy;
+
                 _skillExchangeContext.SaveChanges();
                 return new Result(true, "Course updated successfully");
             }
@@ -117,6 +130,7 @@ namespace Business.Services
                 {
                     return new Result(false, "Course not found");
                 }
+
                 _skillExchangeContext.Course.Remove(course);
                 _skillExchangeContext.SaveChanges();
                 return new Result(true, "Course deleted successfully");
